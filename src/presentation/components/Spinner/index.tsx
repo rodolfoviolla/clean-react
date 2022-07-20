@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
-import Styles from './spinnerStyles.scss'
+import Styles from './styles.scss'
 
 type SpinnerProps = React.HTMLAttributes<HTMLElement>
 
