@@ -1,14 +1,9 @@
 import React from 'react'
-import PropTypes from 'prop-types'
 
 import Styles from './styles.scss'
 
 type SpinnerProps = React.HTMLAttributes<HTMLElement>
 
-export const Spinner: React.FC<SpinnerProps> = (props: SpinnerProps) => {
+export const Spinner = (props: SpinnerProps) => {
   return <div {...props} className={[Styles.spinner, props.className].join(' ')}></div>
-}
-
-Spinner.propTypes = {
-  className: PropTypes.string
 }

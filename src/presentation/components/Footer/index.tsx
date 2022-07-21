@@ -2,7 +2,7 @@ import React, { memo } from 'react'
 
 import Styles from './styles.scss'
 
-const FooterComponent: React.FC = () => {
+const FooterComponent = () => {
   return (
     <footer className={Styles.footer} />
   )
