@@ -1,17 +1,12 @@
 import React, { useState } from 'react'
 
 import { Footer, FormStatus, Input, LoginHeader } from '@/presentation/components'
-import { FormContext } from '@/presentation/contexts'
+import { defaultFormContextValue, FormContext, FormContextProps } from '@/presentation/contexts'
 
 import Styles from './styles.scss'
 
-type StateProps = {
-  isLoading: boolean
-  errorMessage: string
-}
-
-export const Login: React.FC = () => {
-  const [state] = useState<StateProps>({ isLoading: false, errorMessage: '' })
+export const Login = () => {
+  const [state] = useState<FormContextProps>(defaultFormContextValue)
 
   return (
     <div className={Styles.login}>

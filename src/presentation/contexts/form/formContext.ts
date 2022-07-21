@@ -1,8 +1,21 @@
 import { createContext } from 'react'
 
-type FormContextProps = {
+export type FormContextProps = {
   isLoading: boolean
   errorMessage: string
+  email: { errorMessage: string }
+  password: { errorMessage: string }
 }
 
-export const FormContext = createContext<FormContextProps>({ isLoading: false, errorMessage: '' })
+export const defaultFormContextValue: FormContextProps = {
+  isLoading: false,
+  errorMessage: '',
+  email: {
+    errorMessage: 'Campo obrigatório'
+  },
+  password: {
+    errorMessage: 'Campo obrigatório'
+  }
+}
+
+export const FormContext = createContext<FormContextProps>(defaultFormContextValue)
