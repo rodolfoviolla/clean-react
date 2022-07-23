@@ -16,7 +16,7 @@ export const Login = ({ validation }: LoginProps) => {
     errorMessage: '',
     email: {
       value: '',
-      errorMessage: 'Campo obrigatório'
+      errorMessage: ''
     },
     password: {
       value: '',
@@ -25,7 +25,13 @@ export const Login = ({ validation }: LoginProps) => {
   })
 
   useEffect(() => {
-    validation.validate('email', state.email.value)
+    setState({
+      ...state,
+      email: {
+        ...state.email,
+        errorMessage: validation.validate('email', state.email.value)
+      }
+    })
   }, [state.email.value])
 
   useEffect(() => {
