@@ -49,7 +49,14 @@ export const Login = ({ validation }: LoginProps) => {
           <Input type="email" name="email" placeholder="Digite seu e-mail" />
           <Input type="password" name="password" placeholder="Digite sua senha" />
 
-          <button data-testid="submit" disabled type="submit" className={Styles.submit}>Entrar</button>
+          <button
+            data-testid="submit"
+            disabled={!!state.email.errorMessage || !!state.password.errorMessage}
+            type="submit"
+            className={Styles.submit}
+          >
+            Entrar
+          </button>
 
           <span className={Styles.link}>Criar conta</span>
 
