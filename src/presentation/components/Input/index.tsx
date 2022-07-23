@@ -9,9 +9,14 @@ type InputProps = React.DetailedHTMLProps<React.InputHTMLAttributes<HTMLInputEle
 export const Input = (props: InputProps) => {
   const [state, setState] = useContext(FormContext)
   const inputName = props?.name ?? ''
+  const errorMessage = state[inputName].errorMessage
 
   const getStatus = () => {
-    return state[inputName].errorMessage ? '🔴' : ''
+    return errorMessage ? '🔴' : '🟢'
+  }
+
+  const getTitle = () => {
+    return errorMessage || 'Tudo certo'
   }
 
   const handleChange = (event: React.FocusEvent<HTMLInputElement>) => {
@@ -21,7 +26,7 @@ export const Input = (props: InputProps) => {
   return (
     <div className={Styles.inputWrap}>
       <input {...props} data-testid={props.name} onChange={handleChange} />
-      <span data-testid={`${inputName}-status`} title={state[inputName].errorMessage} className={Styles.status}>
+      <span data-testid={`${inputName}-status`} title={getTitle()} className={Styles.status}>
         {getStatus()}
       </span>
     </div>
