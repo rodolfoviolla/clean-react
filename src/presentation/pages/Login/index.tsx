@@ -25,12 +25,12 @@ export const Login = ({ validation }: LoginProps) => {
   })
 
   useEffect(() => {
-    validation.validate({ email: state.email })
-  }, [state.email])
+    validation.validate('email', state.email.value)
+  }, [state.email.value])
 
   useEffect(() => {
-    validation.validate({ password: state.password })
-  }, [state.password])
+    validation.validate('password', state.password.value)
+  }, [state.password.value])
 
   return (
     <div className={Styles.login}>

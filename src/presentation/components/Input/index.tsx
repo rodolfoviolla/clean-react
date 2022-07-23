@@ -15,7 +15,7 @@ export const Input = (props: InputProps) => {
   }
 
   const handleChange = (event: React.FocusEvent<HTMLInputElement>) => {
-    setState({ ...state, [event.target.name]: event.target.value })
+    setState({ ...state, [event.target.name]: { value: event.target.value } })
   }
 
   return (
