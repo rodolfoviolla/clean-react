@@ -36,30 +36,54 @@ const makeSut = (params?: SutParams): SutTypes => {
   return { sut, authenticationSpy }
 }
 
+const testErrorWrapChildCount = (sut: RenderResult, count: number) => {
+  const errorWrap = sut.getByTestId('error-wrap')
+  expect(errorWrap.childElementCount).toBe(count)
+}
+
+const testButtonIsDisabled = (sut: RenderResult, elementTestId: string, isDisabled: boolean) => {
+  const button = sut.getByTestId(elementTestId) as HTMLButtonElement
+  expect(button.disabled).toBe(isDisabled)
+}
+
 const populateEmailField = ({ getByTestId }: RenderResult, email = faker.internet.email()) => {
   const emailInput = getByTestId('email')
   fireEvent.input(emailInput, { target: { value: email } })
+  return email
 }
 
 const populatePasswordField = ({ getByTestId }: RenderResult, password = faker.internet.password()) => {
   const passwordInput = getByTestId('password')
   fireEvent.input(passwordInput, { target: { value: password } })
+  return password
 }
 
-const simulateValidSubmit = (sut: RenderResult, email = faker.internet.email(), password = faker.internet.password()) => {
-  populateEmailField(sut, email)
-  populatePasswordField(sut, password)
+const simulateValidSubmit = async (sut: RenderResult, waitForCallback?: () => void) => {
+  const email = populateEmailField(sut)
+  const password = populatePasswordField(sut)
 
   const submitButton = sut.getByTestId('submit')
   fireEvent.click(submitButton)
 
+  waitForCallback && await waitFor(waitForCallback)
+
   return { email, password }
 }
 
-const simulateStatusField = (sut: RenderResult, fieldName: string, validationError?: string) => {
+const testStatusField = (sut: RenderResult, fieldName: string, validationError?: string) => {
   const emailStatus = sut.getByTestId(`${fieldName}-status`)
   expect(emailStatus.title).toBe(validationError || 'Tudo certo')
   expect(emailStatus.textContent).toBe(validationError ? '🔴' : '🟢')
+}
+
+const testElementExists = (sut: RenderResult, elementTestId: string) => {
+  const element = sut.getByTestId(elementTestId)
+  expect(element).toBeTruthy()
+}
+
+const testElementText = (sut: RenderResult, elementTestId: string, text: string) => {
+  const element = sut.getByTestId(elementTestId)
+  expect(element.textContent).toBe(text)
 }
 
 describe('Login Component', () => {
@@ -69,61 +93,54 @@ describe('Login Component', () => {
   test('Should start with initial state', () => {
     const validationError = faker.random.words()
     const { sut } = makeSut({ validationError })
-
-    const errorWrap = sut.getByTestId('error-wrap')
-    expect(errorWrap.childElementCount).toBe(0)
-
-    const submitButton = sut.getByTestId('submit') as HTMLButtonElement
-    expect(submitButton.disabled).toBeTruthy()
-
-    simulateStatusField(sut, 'email', validationError)
-    simulateStatusField(sut, 'password', validationError)
+    testErrorWrapChildCount(sut, 0)
+    testButtonIsDisabled(sut, 'submit', true)
+    testStatusField(sut, 'email', validationError)
+    testStatusField(sut, 'password', validationError)
   })
 
   test('Should show email error if Validation fails', () => {
     const validationError = faker.random.words()
     const { sut } = makeSut({ validationError })
     populateEmailField(sut)
-    simulateStatusField(sut, 'email', validationError)
+    testStatusField(sut, 'email', validationError)
   })
 
   test('Should show password error if Validation fails', () => {
     const validationError = faker.random.words()
     const { sut } = makeSut({ validationError })
     populatePasswordField(sut)
-    simulateStatusField(sut, 'password', validationError)
+    testStatusField(sut, 'password', validationError)
   })
 
   test('Should show valid email state if Validation succeeds', () => {
     const { sut } = makeSut()
     populateEmailField(sut)
-    simulateStatusField(sut, 'email')
+    testStatusField(sut, 'email')
   })
 
   test('Should show valid password state if Validation succeeds', () => {
     const { sut } = makeSut()
     populatePasswordField(sut)
-    simulateStatusField(sut, 'password')
+    testStatusField(sut, 'password')
   })
 
   test('Should enable submit button if form is valid', () => {
     const { sut } = makeSut()
     populateEmailField(sut)
     populatePasswordField(sut)
-    const submitButton = sut.getByTestId('submit') as HTMLButtonElement
-    expect(submitButton.disabled).toBeFalsy()
+    testButtonIsDisabled(sut, 'submit', false)
   })
 
   test('Should show spinner on submit', () => {
     const { sut } = makeSut()
     simulateValidSubmit(sut)
-    const spinner = sut.getByTestId('spinner')
-    expect(spinner).toBeTruthy()
+    testElementExists(sut, 'spinner')
   })
 
-  test('Should call Authentication with correct values', () => {
+  test('Should call Authentication with correct values', async () => {
     const { sut, authenticationSpy } = makeSut()
-    const { email, password } = simulateValidSubmit(sut)
+    const { email, password } = await simulateValidSubmit(sut)
     expect(authenticationSpy.params).toEqual({ email, password })
   })
 
@@ -145,19 +162,15 @@ describe('Login Component', () => {
     const { sut, authenticationSpy } = makeSut()
     const error = new InvalidCredentialsError()
     jest.spyOn(authenticationSpy, 'auth').mockRejectedValueOnce(error)
-    simulateValidSubmit(sut)
-    await waitFor(() => {
-      const errorWrap = sut.getByTestId('error-wrap')
-      const errorMessage = sut.getByTestId('error-message')
-      expect(errorMessage.textContent).toBe(error.message)
-      expect(errorWrap.childElementCount).toBe(1)
+    await simulateValidSubmit(sut, () => {
+      testErrorWrapChildCount(sut, 1)
+      testElementText(sut, 'error-message', error.message)
     })
   })
 
   test('Should add accessToken to local storage and navigates to main page on success', async () => {
     const { sut, authenticationSpy } = makeSut()
-    simulateValidSubmit(sut)
-    await waitFor(() => {
+    await simulateValidSubmit(sut, () => {
       expect(localStorage.setItem).toHaveBeenCalledWith('accessToken', authenticationSpy.account.accessToken)
       expect(history.index).toBe(0)
       expect(history.location.pathname).toBe('/')
