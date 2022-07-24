@@ -49,7 +49,8 @@ export const Login = ({ validation, authentication }: LoginProps) => {
 
       setState({ ...state, isLoading: true })
 
-      await authentication.auth({ email: state.email.value, password: state.password.value })
+      const account = await authentication.auth({ email: state.email.value, password: state.password.value })
+      localStorage.setItem('accessToken', account.accessToken)
     } catch (error) {
       setState({ ...state, isLoading: false, errorMessage: error.message })
     }
