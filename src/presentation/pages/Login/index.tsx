@@ -41,13 +41,18 @@ export const Login = ({ validation, authentication }: LoginProps) => {
     })
   }, [state.email.value, state.password.value])
 
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault()
 
-    if (state.isLoading || state.email.errorMessage || state.password.errorMessage) return
+    try {
+      if (state.isLoading || state.email.errorMessage || state.password.errorMessage) return
 
-    setState({ ...state, isLoading: true })
-    authentication.auth({ email: state.email.value, password: state.password.value })
+      setState({ ...state, isLoading: true })
+
+      await authentication.auth({ email: state.email.value, password: state.password.value })
+    } catch (error) {
+      setState({ ...state, isLoading: false, errorMessage: error.message })
+    }
   }
 
   return (
