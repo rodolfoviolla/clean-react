@@ -44,7 +44,7 @@ export const Login = ({ validation, authentication }: LoginProps) => {
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault()
 
-    if (state.isLoading) return
+    if (state.isLoading || state.email.errorMessage || state.password.errorMessage) return
 
     setState({ ...state, isLoading: true })
     authentication.auth({ email: state.email.value, password: state.password.value })
@@ -55,7 +55,7 @@ export const Login = ({ validation, authentication }: LoginProps) => {
       <LoginHeader />
 
       <FormContext.Provider value={[state, setState]}>
-        <form className={Styles.form} onSubmit={handleSubmit}>
+        <form data-testid="form" className={Styles.form} onSubmit={handleSubmit}>
           <h2>Login</h2>
           <Input type="email" name="email" placeholder="Digite seu e-mail" />
           <Input type="password" name="password" placeholder="Digite sua senha" />
