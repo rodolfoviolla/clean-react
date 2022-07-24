@@ -43,6 +43,9 @@ export const Login = ({ validation, authentication }: LoginProps) => {
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault()
+
+    if (state.isLoading) return
+
     setState({ ...state, isLoading: true })
     authentication.auth({ email: state.email.value, password: state.password.value })
   }
