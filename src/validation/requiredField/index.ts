@@ -5,6 +5,6 @@ export class RequiredFieldValidation implements FieldValidation {
   constructor (readonly name: string) {}
 
   validate (value: string) {
-    return new RequiredFieldError()
+    return value ? null : new RequiredFieldError()
   }
 }
