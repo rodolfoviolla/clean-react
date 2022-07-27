@@ -4,7 +4,7 @@ import ReactDOM from 'react-dom'
 import '@/presentation/styles/global.scss'
 
 import { Router } from '@/presentation/components'
-import { makeLogin } from '@/main/factories/pages/login'
+import { makeLogin } from '@/main/factories/pages'
 
 ReactDOM.render(
   <Router makeLogin={() => makeLogin()} />,
