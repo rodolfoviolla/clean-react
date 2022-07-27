@@ -16,7 +16,7 @@ const makeSut = (): SutTypes => {
   return { sut, fieldName }
 }
 
-describe('RequiredFieldValidation', () => {
+describe('EmailValidation', () => {
   test('Should return error if email is invalid', () => {
     const { sut, fieldName } = makeSut()
     const error = sut.validate(faker.random.word())
