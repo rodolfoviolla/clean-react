@@ -1,6 +1,6 @@
 import { faker } from '@faker-js/faker'
 
-import { HttpPostParams } from '../protocols/http'
+import { HttpPostParams } from '@/data/protocols/http'
 
 export const makePostRequest = (): HttpPostParams<any> => ({
   url: faker.internet.url(),
