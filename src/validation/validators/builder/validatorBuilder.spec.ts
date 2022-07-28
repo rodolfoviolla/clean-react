@@ -1,8 +1,6 @@
 import { faker } from '@faker-js/faker'
 
-import { EmailValidation, MinLengthValidation, RequiredFieldValidation } from '@/validation/validators'
-
-import { ValidationBuilder } from '.'
+import { EmailValidation, MinLengthValidation, RequiredFieldValidation, ValidationBuilder } from '@/validation/validators'
 
 type SutTypes = {
   sut: ValidationBuilder

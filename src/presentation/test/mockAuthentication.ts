@@ -1,5 +1,5 @@
 import { Authentication, AuthenticationParams } from '@/domain/useCases/authentication'
-import { AccountModel } from '@/domain/models'
+import { AccountModel } from '@/domain/models/accountModel'
 import { mockAccountModel } from '@/domain/test'
 
 export class AuthenticationSpy implements Authentication {

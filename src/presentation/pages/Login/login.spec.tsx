@@ -6,9 +6,8 @@ import { cleanup, fireEvent, render, RenderResult, waitFor } from '@testing-libr
 import 'jest-localstorage-mock'
 
 import { InvalidCredentialsError } from '@/domain/errors'
+import { Login } from '@/presentation/pages'
 import { AuthenticationSpy, ValidationStub } from '@/presentation/test'
-
-import { Login } from '.'
 
 type SutParams = {
   validationError: string
