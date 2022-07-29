@@ -1,7 +1,6 @@
 {
   "name": "clean-react",
-  "version": "0.0.0",
-  "description": "",
+  "version": "1.0.0",
   "author": "Rodolfo Della Violla",
   "main": "index.js",
   "scripts": {
