@@ -1,7 +1,8 @@
 {
   "name": "clean-react",
-  "version": "1.0.0",
+  "version": "0.0.0",
   "description": "",
+  "author": "Rodolfo Della Violla",
   "main": "index.js",
   "scripts": {
     "start": "webpack-dev-server --open",
@@ -11,8 +12,6 @@
     "test:ci": "yarn test --coverage",
     "prepare": "husky install"
   },
-  "keywords": [],
-  "author": "",
   "license": "ISC",
   "devDependencies": {
     "@faker-js/faker": "^7.3.0",
@@ -52,6 +51,7 @@
   },
   "dependencies": {
     "axios": "^0.27.2",
+    "dotenv": "^16.0.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-router-dom": "^6.3.0"

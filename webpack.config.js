@@ -1,5 +1,7 @@
-const path = require('path')
 const { CleanWebpackPlugin } = require('clean-webpack-plugin')
+const dotenv = require('dotenv')
+const path = require('path')
+const { DefinePlugin } = require('webpack')
 
 module.exports = {
   mode: 'development',
@@ -55,6 +57,9 @@ module.exports = {
     'react-dom': 'ReactDOM'
   },
   plugins: [
-    new CleanWebpackPlugin()
+    new CleanWebpackPlugin(),
+    new DefinePlugin({
+      'process.env': JSON.stringify(dotenv.config().parsed)
+    })
   ]
 }
