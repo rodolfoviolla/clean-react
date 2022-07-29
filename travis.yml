@@ -1,0 +1,6 @@
+language: node_js
+node_js:
+  - 16.16.0
+script:
+  - yarn validate
+  - yarn test:ci

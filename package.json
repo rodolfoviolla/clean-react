@@ -9,7 +9,8 @@
     "test:watch": "yarn test --watch",
     "test:staged": "yarn test --findRelatedTests",
     "test:ci": "yarn test --coverage",
-    "prepare": "husky install"
+    "prepare": "husky install",
+    "validate": "eslint 'src/**'"
   },
   "license": "ISC",
   "devDependencies": {
