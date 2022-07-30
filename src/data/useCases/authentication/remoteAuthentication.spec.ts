@@ -11,19 +11,20 @@ import { AuthenticationParams } from '@/domain/useCases/authentication'
 type SutTypes = {
   sut: RemoteAuthentication
   httpPostClientSpy: HttpPostClientSpy<AuthenticationParams, AccountModel>
+  url: string
 }
 
-const makeSut = (url = faker.internet.url()): SutTypes => {
+const makeSut = (): SutTypes => {
+  const url = faker.internet.url()
   const httpPostClientSpy = new HttpPostClientSpy<AuthenticationParams, AccountModel>()
   const sut = new RemoteAuthentication(url, httpPostClientSpy)
 
-  return { sut, httpPostClientSpy }
+  return { sut, httpPostClientSpy, url }
 }
 
 describe('RemoteAuthentication', () => {
   test('Should call HttpClient with correct URL', async () => {
-    const url = faker.internet.url()
-    const { sut, httpPostClientSpy } = makeSut(url)
+    const { sut, httpPostClientSpy, url } = makeSut()
     await sut.auth(mockAuthentication())
     expect(httpPostClientSpy.url).toBe(url)
   })
