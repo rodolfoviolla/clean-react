@@ -54,7 +54,7 @@ export const Login = ({ validation, authentication, saveAccessToken }: LoginProp
       setState({ ...state, isLoading: true })
 
       const account = await authentication.auth({ email: state.email.value, password: state.password.value })
-      saveAccessToken.save(account.accessToken)
+      await saveAccessToken.save(account.accessToken)
       navigate('/', { replace: true })
     } catch (error) {
       setState({ ...state, isLoading: false, errorMessage: error.message })
