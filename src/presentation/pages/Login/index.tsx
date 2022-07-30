@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 
 import { Authentication } from '@/domain/useCases/authentication'
+import { SaveAccessToken } from '@/domain/useCases/saveAccessToken'
 import { Footer, FormStatus, Input, LoginHeader } from '@/presentation/components'
 import { FormContext } from '@/presentation/contexts'
 import { Validation } from '@/presentation/protocols/validation'
@@ -9,11 +10,12 @@ import { Validation } from '@/presentation/protocols/validation'
 import Styles from './styles.scss'
 
 type LoginProps = {
-  validation?: Validation
-  authentication?: Authentication
+  validation: Validation
+  authentication: Authentication
+  saveAccessToken: SaveAccessToken
 }
 
-export const Login = ({ validation, authentication }: LoginProps) => {
+export const Login = ({ validation, authentication, saveAccessToken }: LoginProps) => {
   const navigate = useNavigate()
   const [state, setState] = useState({
     isLoading: false,
@@ -52,7 +54,7 @@ export const Login = ({ validation, authentication }: LoginProps) => {
       setState({ ...state, isLoading: true })
 
       const account = await authentication.auth({ email: state.email.value, password: state.password.value })
-      localStorage.setItem('accessToken', account.accessToken)
+      saveAccessToken.save(account.accessToken)
       navigate('/', { replace: true })
     } catch (error) {
       setState({ ...state, isLoading: false, errorMessage: error.message })
