@@ -4,13 +4,7 @@ import { FieldValidationSpy } from '@/validation/test'
 
 import { ValidationComposite } from './validationComposite'
 
-type SutTypes = {
-  sut: ValidationComposite
-  fieldName: string
-  fieldValidationsSpy: FieldValidationSpy[]
-}
-
-const makeSut = (): SutTypes => {
+const makeSut = () => {
   const fieldName = faker.database.column()
   const fieldValidationsSpy = [new FieldValidationSpy(fieldName), new FieldValidationSpy(fieldName)]
   const sut = ValidationComposite.build(fieldValidationsSpy)

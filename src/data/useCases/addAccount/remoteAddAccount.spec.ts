@@ -9,13 +9,7 @@ import { AddAccountParams } from '@/domain/useCases'
 
 import { RemoteAddAccount } from './remoteAddAccount'
 
-type SutTypes = {
-  sut: RemoteAddAccount
-  httpPostClientSpy: HttpPostClientSpy<AddAccountParams, AccountModel>
-  url: string
-}
-
-const makeSut = (): SutTypes => {
+const makeSut = () => {
   const url = faker.internet.url()
   const httpPostClientSpy = new HttpPostClientSpy<AddAccountParams, AccountModel>()
   const sut = new RemoteAddAccount(url, httpPostClientSpy)

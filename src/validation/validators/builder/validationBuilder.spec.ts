@@ -4,13 +4,7 @@ import { EmailValidation, MinLengthValidation, RequiredFieldValidation } from '@
 
 import { ValidationBuilder } from './validationBuilder'
 
-type SutTypes = {
-  sut: ValidationBuilder
-  fieldName: string
-  minLength: number
-}
-
-const makeSut = (): SutTypes => {
+const makeSut = () => {
   const fieldName = faker.database.column()
   const minLength = faker.datatype.number({ min: 2, max: 10 })
   const sut = ValidationBuilder.field(fieldName)

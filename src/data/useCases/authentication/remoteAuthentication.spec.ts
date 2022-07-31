@@ -8,13 +8,7 @@ import { AccountModel } from '@/domain/models'
 import { mockAccountModel, mockAuthentication } from '@/domain/test'
 import { AuthenticationParams } from '@/domain/useCases'
 
-type SutTypes = {
-  sut: RemoteAuthentication
-  httpPostClientSpy: HttpPostClientSpy<AuthenticationParams, AccountModel>
-  url: string
-}
-
-const makeSut = (): SutTypes => {
+const makeSut = () => {
   const url = faker.internet.url()
   const httpPostClientSpy = new HttpPostClientSpy<AuthenticationParams, AccountModel>()
   const sut = new RemoteAuthentication(url, httpPostClientSpy)

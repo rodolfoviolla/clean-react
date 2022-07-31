@@ -4,13 +4,7 @@ import { InvalidFieldError } from '@/validation/errors'
 
 import { MinLengthValidation } from './minLengthValidation'
 
-type SutTypes = {
-  sut: MinLengthValidation
-  fieldName: string
-  minLength: number
-}
-
-const makeSut = (): SutTypes => {
+const makeSut = () => {
   const fieldName = faker.database.column()
   const minLength = faker.datatype.number({ min: 2, max: 10 })
   const sut = new MinLengthValidation(fieldName, minLength)

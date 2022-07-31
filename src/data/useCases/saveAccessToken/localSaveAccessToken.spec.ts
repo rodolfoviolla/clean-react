@@ -4,12 +4,7 @@ import { SetStorageMock } from '@/data/test'
 
 import { LocalSaveAccessToken } from './localSaveAccessToken'
 
-type SutTypes = {
-  sut: LocalSaveAccessToken
-  setStorageMock: SetStorageMock
-}
-
-const makeSut = (): SutTypes => {
+const makeSut = () => {
   const setStorageMock = new SetStorageMock()
   const sut = new LocalSaveAccessToken(setStorageMock)
 

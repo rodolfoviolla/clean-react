@@ -4,12 +4,7 @@ import { InvalidFieldError } from '@/validation/errors'
 
 import { EmailValidation } from './emailValidation'
 
-type SutTypes = {
-  sut: EmailValidation
-  fieldName: string
-}
-
-const makeSut = (): SutTypes => {
+const makeSut = () => {
   const fieldName = faker.database.column()
   const sut = new EmailValidation(fieldName)
 

@@ -12,15 +12,9 @@ type SutParams = {
   validationError: string
 }
 
-type SutTypes = {
-  sut: RenderResult
-  authenticationSpy: AuthenticationSpy
-  saveAccessTokenMock: SaveAccessTokenMock
-}
-
 const history = createMemoryHistory({ initialEntries: ['/login'] })
 
-const makeSut = (params?: SutParams): SutTypes => {
+const makeSut = (params?: SutParams) => {
   const validationStub = new ValidationStub()
   const authenticationSpy = new AuthenticationSpy()
   const saveAccessTokenMock = new SaveAccessTokenMock()
