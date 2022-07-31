@@ -2,7 +2,7 @@ import React from 'react'
 import { Router } from 'react-router-dom'
 import { createMemoryHistory } from 'history'
 import { faker } from '@faker-js/faker'
-import { cleanup, fireEvent, render, RenderResult, waitFor } from '@testing-library/react'
+import { cleanup, fireEvent, render, RenderResult } from '@testing-library/react'
 
 import { InvalidCredentialsError } from '@/domain/errors'
 import { Login } from '@/presentation/pages'
@@ -31,20 +31,11 @@ const makeSut = (params?: SutParams) => {
 }
 
 const simulateValidSubmit = async (sut: RenderResult, waitForCallback?: () => void) => {
-  const email = formHelpers.populateFormField(sut, 'email')
-  const password = formHelpers.populateFormField(sut, 'password')
-
-  const submitButton = sut.getByTestId('submit')
-  fireEvent.click(submitButton)
-
-  waitForCallback && await waitFor(waitForCallback)
-
-  return { email, password }
-}
-
-const testElementExists = (sut: RenderResult, elementTestId: string) => {
-  const element = sut.getByTestId(elementTestId)
-  expect(element).toBeTruthy()
+  return await formHelpers.simulateValidSubmitFactory(
+    sut,
+    ['email', 'password'],
+    waitForCallback
+  )
 }
 
 const testElementText = (sut: RenderResult, elementTestId: string, text: string) => {
@@ -100,7 +91,7 @@ describe('Login Component', () => {
   test('Should show spinner on submit', () => {
     const { sut } = makeSut()
     simulateValidSubmit(sut)
-    testElementExists(sut, 'spinner')
+    formHelpers.testElementExists(sut, 'spinner')
   })
 
   test('Should call Authentication with correct values', async () => {

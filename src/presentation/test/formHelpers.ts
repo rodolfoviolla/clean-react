@@ -1,12 +1,12 @@
 import { faker } from '@faker-js/faker'
-import { fireEvent, RenderResult } from '@testing-library/react'
+import { fireEvent, RenderResult, waitFor } from '@testing-library/react'
 
-const fakerFn = {
-  name: faker.name.findName,
-  email: faker.internet.email,
-  password: faker.internet.password,
-  passwordConfirmation: faker.internet.password
-}
+const getMockedValues = () => ({
+  name: faker.name.findName(),
+  email: faker.internet.email(),
+  password: faker.internet.password(),
+  passwordConfirmation: faker.internet.password()
+})
 
 export const testElementChildCount = (sut: RenderResult, fieldName: string, count: number) => {
   const element = sut.getByTestId(fieldName)
@@ -24,9 +24,33 @@ export const testStatusField = (sut: RenderResult, fieldName: string, validation
   expect(statusElement.textContent).toBe(validationError ? '🔴' : '🟢')
 }
 
-export const populateFormField = ({ getByTestId }: RenderResult, name: string, defaultValue?: any) => {
+export const populateFormField = ({ getByTestId }: RenderResult, name: string) => {
   const input = getByTestId(name)
-  const value = defaultValue || fakerFn[name]()
+  const value = getMockedValues()[name]
   fireEvent.input(input, { target: { value } })
   return value
+}
+
+export const simulateValidSubmitFactory = async <T extends string>(
+  sut: RenderResult,
+  fieldList: T[],
+  waitForCallback?: () => void
+) => {
+  const populatedFields = fieldList.reduce((acc, field) => {
+    const value = populateFormField(sut, field)
+
+    return { ...acc, [field]: value }
+  }, {})
+
+  const submitButton = sut.getByTestId('submit')
+  fireEvent.click(submitButton)
+
+  waitForCallback && await waitFor(waitForCallback)
+
+  return populatedFields as { [key in T]: unknown }
+}
+
+export const testElementExists = (sut: RenderResult, elementTestId: string) => {
+  const element = sut.getByTestId(elementTestId)
+  expect(element).toBeTruthy()
 }
