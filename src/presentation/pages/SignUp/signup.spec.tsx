@@ -5,7 +5,7 @@ import { faker } from '@faker-js/faker'
 import { cleanup, render, RenderResult } from '@testing-library/react'
 
 import { SignUp } from '@/presentation/pages'
-import { formHelpers, ValidationStub } from '@/presentation/test'
+import { AddAccountSpy, formHelpers, ValidationStub } from '@/presentation/test'
 
 type SutParams = {
   validationError: string
@@ -15,16 +15,17 @@ const history = createMemoryHistory({ initialEntries: ['/signup'] })
 
 const makeSut = (params?: SutParams) => {
   const validationStub = new ValidationStub()
+  const addAccountSpy = new AddAccountSpy()
 
   validationStub.errorMessage = params?.validationError
 
   const sut = render(
     <Router location={history.location} navigator={history}>
-      <SignUp validation={validationStub} />
+      <SignUp validation={validationStub} addAccount={addAccountSpy} />
     </Router>
   )
 
-  return { sut }
+  return { sut, addAccountSpy }
 }
 
 const simulateValidSubmit = async (sut: RenderResult, waitForCallback?: () => void) => {
@@ -118,5 +119,11 @@ describe('Login Component', () => {
     const { sut } = makeSut()
     simulateValidSubmit(sut)
     formHelpers.testElementExists(sut, 'spinner')
+  })
+
+  test('Should call AddAccount with correct values', async () => {
+    const { sut, addAccountSpy } = makeSut()
+    const fields = await simulateValidSubmit(sut)
+    expect(addAccountSpy.params).toEqual(fields)
   })
 })
