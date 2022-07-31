@@ -1,7 +1,7 @@
 import React from 'react'
 
 import { makeRemoteAuthentication, makeLocalSaveAccessToken } from '@/main/factories/useCases'
-import { Login } from '@/presentation/pages/Login'
+import { Login } from '@/presentation/pages'
 
 import { makeLoginValidation } from './loginValidationFactory'
 
