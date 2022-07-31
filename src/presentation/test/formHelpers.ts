@@ -4,7 +4,8 @@ import { fireEvent, RenderResult } from '@testing-library/react'
 const fakerFn = {
   name: faker.name.findName,
   email: faker.internet.email,
-  password: faker.internet.password
+  password: faker.internet.password,
+  passwordConfirmation: faker.internet.password
 }
 
 export const testElementChildCount = (sut: RenderResult, fieldName: string, count: number) => {
