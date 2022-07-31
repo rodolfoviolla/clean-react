@@ -7,7 +7,20 @@ import { FormContext } from '@/presentation/contexts'
 import Styles from './styles.scss'
 
 export const SignUp = () => {
-  const state = useState(null)
+  const state = useState({
+    name: {
+      errorMessage: 'Campo obrigatório'
+    },
+    email: {
+      errorMessage: 'Campo obrigatório'
+    },
+    password: {
+      errorMessage: 'Campo obrigatório'
+    },
+    passwordConfirmation: {
+      errorMessage: 'Campo obrigatório'
+    }
+  })
 
   return (
     <div className={Styles.signup}>
@@ -21,7 +34,7 @@ export const SignUp = () => {
           <Input type="password" name="password" placeholder="Digite sua senha" />
           <Input type="password" name="passwordConfirmation" placeholder="Confirme sua senha" />
 
-          <button type="submit" className={Styles.submit} >
+          <button data-testid="submit" disabled type="submit" className={Styles.submit} >
             Criar
           </button>
 
