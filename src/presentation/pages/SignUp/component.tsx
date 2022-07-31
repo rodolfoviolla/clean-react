@@ -13,6 +13,7 @@ type Props = {
 
 export const SignUp = ({ validation }: Props) => {
   const [state, setState] = useState({
+    isLoading: false,
     name: {
       value: '',
       errorMessage: ''
@@ -53,6 +54,11 @@ export const SignUp = ({ validation }: Props) => {
     })
   }, [state.name.value, state.email.value, state.password.value, state.passwordConfirmation.value])
 
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault()
+    setState({ ...state, isLoading: true })
+  }
+
   const isButtonDisabled =
     !!state.name.errorMessage ||
     !!state.email.errorMessage ||
@@ -64,7 +70,7 @@ export const SignUp = ({ validation }: Props) => {
       <LoginHeader />
 
       <FormContext.Provider value={[state, setState]}>
-        <form className={Styles.form}>
+        <form className={Styles.form} onSubmit={handleSubmit}>
           <h2>Criar conta</h2>
           <Input type="text" name="name" placeholder="Digite seu nome" />
           <Input type="email" name="email" placeholder="Digite seu e-mail" />
