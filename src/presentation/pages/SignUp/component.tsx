@@ -26,7 +26,8 @@ export const SignUp = ({ validation }: Props) => {
       errorMessage: ''
     },
     passwordConfirmation: {
-      errorMessage: 'Campo obrigatório'
+      value: '',
+      errorMessage: ''
     }
   })
 
@@ -44,9 +45,13 @@ export const SignUp = ({ validation }: Props) => {
       password: {
         ...state.password,
         errorMessage: validation.validate('password', state.password.value)
+      },
+      passwordConfirmation: {
+        ...state.passwordConfirmation,
+        errorMessage: validation.validate('passwordConfirmation', state.passwordConfirmation.value)
       }
     })
-  }, [state.name.value, state.email.value, state.password.value])
+  }, [state.name.value, state.email.value, state.password.value, state.passwordConfirmation.value])
 
   return (
     <div className={Styles.signup}>
