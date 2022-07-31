@@ -1,11 +1,10 @@
 import React, { useEffect, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 
-import { Authentication } from '@/domain/useCases/authentication'
-import { SaveAccessToken } from '@/domain/useCases/saveAccessToken'
+import { Authentication, SaveAccessToken } from '@/domain/useCases'
 import { Footer, FormStatus, Input, LoginHeader } from '@/presentation/components'
 import { FormContext } from '@/presentation/contexts'
-import { Validation } from '@/presentation/protocols/validation'
+import { Validation } from '@/presentation/protocols'
 
 import Styles from './styles.scss'
 

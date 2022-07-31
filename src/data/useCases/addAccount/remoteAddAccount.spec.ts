@@ -3,9 +3,9 @@ import { faker } from '@faker-js/faker'
 import { HttpStatusCode } from '@/data/protocols/http'
 import { HttpPostClientSpy } from '@/data/test'
 import { EmailInUseError, UnexpectedError } from '@/domain/errors'
-import { AccountModel } from '@/domain/models/accountModel'
+import { AccountModel } from '@/domain/models'
 import { mockAccountModel, mockAddAccount } from '@/domain/test'
-import { AddAccountParams } from '@/domain/useCases/addAccount'
+import { AddAccountParams } from '@/domain/useCases'
 
 import { RemoteAddAccount } from './remoteAddAccount'
 

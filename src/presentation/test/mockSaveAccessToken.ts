@@ -1,4 +1,4 @@
-import { SaveAccessToken } from '@/domain/useCases/saveAccessToken'
+import { SaveAccessToken } from '@/domain/useCases'
 
 export class SaveAccessTokenMock implements SaveAccessToken {
   accessToken: string
