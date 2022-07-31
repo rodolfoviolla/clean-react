@@ -1,11 +1,12 @@
 import React from 'react'
 import { Router } from 'react-router-dom'
 import { createMemoryHistory } from 'history'
-import { render, RenderResult } from '@testing-library/react'
+import { render } from '@testing-library/react'
 
 import { SignUp } from '@/presentation/pages'
+import { formHelpers } from '@/presentation/test'
 
-const history = createMemoryHistory({ initialEntries: ['/login'] })
+const history = createMemoryHistory({ initialEntries: ['/signup'] })
 
 const makeSut = () => {
   const sut = render(
@@ -17,31 +18,15 @@ const makeSut = () => {
   return { sut }
 }
 
-const testElementChildCount = (sut: RenderResult, fieldName: string, count: number) => {
-  const element = sut.getByTestId(fieldName)
-  expect(element.childElementCount).toBe(count)
-}
-
-const testButtonIsDisabled = (sut: RenderResult, elementTestId: string, isDisabled: boolean) => {
-  const button = sut.getByTestId(elementTestId) as HTMLButtonElement
-  expect(button.disabled).toBe(isDisabled)
-}
-
-const testStatusField = (sut: RenderResult, fieldName: string, validationError?: string) => {
-  const statusElement = sut.getByTestId(`${fieldName}-status`)
-  expect(statusElement.title).toBe(validationError || 'Tudo certo')
-  expect(statusElement.textContent).toBe(validationError ? '🔴' : '🟢')
-}
-
 describe('Login Component', () => {
   test('Should start with initial state', () => {
     const validationError = 'Campo obrigatório'
     const { sut } = makeSut()
-    testElementChildCount(sut, 'error-wrap', 0)
-    testButtonIsDisabled(sut, 'submit', true)
-    testStatusField(sut, 'name', validationError)
-    testStatusField(sut, 'email', validationError)
-    testStatusField(sut, 'password', validationError)
-    testStatusField(sut, 'passwordConfirmation', validationError)
+    formHelpers.testElementChildCount(sut, 'error-wrap', 0)
+    formHelpers.testButtonIsDisabled(sut, 'submit', true)
+    formHelpers.testStatusField(sut, 'name', validationError)
+    formHelpers.testStatusField(sut, 'email', validationError)
+    formHelpers.testStatusField(sut, 'password', validationError)
+    formHelpers.testStatusField(sut, 'passwordConfirmation', validationError)
   })
 })
