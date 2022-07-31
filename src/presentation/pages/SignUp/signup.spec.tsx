@@ -2,7 +2,7 @@ import React from 'react'
 import { Router } from 'react-router-dom'
 import { createMemoryHistory } from 'history'
 import { faker } from '@faker-js/faker'
-import { cleanup, fireEvent, render, RenderResult } from '@testing-library/react'
+import { cleanup, render } from '@testing-library/react'
 
 import { SignUp } from '@/presentation/pages'
 import { formHelpers, ValidationStub } from '@/presentation/test'
@@ -27,16 +27,6 @@ const makeSut = (params?: SutParams) => {
   return { sut }
 }
 
-const fakeValues = {
-  name: faker.name.findName()
-}
-
-const populateFormField = ({ getByTestId }: RenderResult, name: string, value = fakeValues[name]) => {
-  const input = getByTestId(name)
-  fireEvent.input(input, { target: { value } })
-  return value
-}
-
 describe('Login Component', () => {
   afterEach(cleanup)
 
@@ -55,7 +45,7 @@ describe('Login Component', () => {
     const validationError = faker.random.words()
     const { sut } = makeSut({ validationError })
     const fieldName = 'name'
-    populateFormField(sut, fieldName)
+    formHelpers.populateFormField(sut, fieldName)
     formHelpers.testStatusField(sut, fieldName, validationError)
   })
 })

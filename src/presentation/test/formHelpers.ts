@@ -1,4 +1,11 @@
-import { RenderResult } from '@testing-library/react'
+import { faker } from '@faker-js/faker'
+import { fireEvent, RenderResult } from '@testing-library/react'
+
+const fakerFn = {
+  name: faker.name.findName,
+  email: faker.internet.email,
+  password: faker.internet.password
+}
 
 export const testElementChildCount = (sut: RenderResult, fieldName: string, count: number) => {
   const element = sut.getByTestId(fieldName)
@@ -14,4 +21,11 @@ export const testStatusField = (sut: RenderResult, fieldName: string, validation
   const statusElement = sut.getByTestId(`${fieldName}-status`)
   expect(statusElement.title).toBe(validationError || 'Tudo certo')
   expect(statusElement.textContent).toBe(validationError ? '🔴' : '🟢')
+}
+
+export const populateFormField = ({ getByTestId }: RenderResult, name: string) => {
+  const input = getByTestId(name)
+  const value = fakerFn[name]()
+  fireEvent.input(input, { target: { value } })
+  return value
 }
