@@ -24,9 +24,9 @@ export const testStatusField = (sut: RenderResult, fieldName: string, validation
   expect(statusElement.textContent).toBe(validationError ? '🔴' : '🟢')
 }
 
-export const populateFormField = ({ getByTestId }: RenderResult, name: string) => {
+export const populateFormField = ({ getByTestId }: RenderResult, name: string, defaultValue?: any) => {
   const input = getByTestId(name)
-  const value = fakerFn[name]()
+  const value = defaultValue || fakerFn[name]()
   fireEvent.input(input, { target: { value } })
   return value
 }

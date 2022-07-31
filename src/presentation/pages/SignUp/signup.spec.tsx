@@ -2,7 +2,7 @@ import React from 'react'
 import { Router } from 'react-router-dom'
 import { createMemoryHistory } from 'history'
 import { faker } from '@faker-js/faker'
-import { cleanup, render } from '@testing-library/react'
+import { cleanup, fireEvent, render, RenderResult, waitFor } from '@testing-library/react'
 
 import { SignUp } from '@/presentation/pages'
 import { formHelpers, ValidationStub } from '@/presentation/test'
@@ -25,6 +25,25 @@ const makeSut = (params?: SutParams) => {
   )
 
   return { sut }
+}
+
+const simulateValidSubmit = async (sut: RenderResult, waitForCallback?: () => void) => {
+  const name = formHelpers.populateFormField(sut, 'name')
+  const email = formHelpers.populateFormField(sut, 'email')
+  const password = formHelpers.populateFormField(sut, 'password')
+  const passwordConfirmation = formHelpers.populateFormField(sut, 'passwordConfirmation', password)
+
+  const submitButton = sut.getByTestId('submit')
+  fireEvent.click(submitButton)
+
+  waitForCallback && await waitFor(waitForCallback)
+
+  return { name, email, password, passwordConfirmation }
+}
+
+const testElementExists = (sut: RenderResult, elementTestId: string) => {
+  const element = sut.getByTestId(elementTestId)
+  expect(element).toBeTruthy()
 }
 
 describe('Login Component', () => {
@@ -104,5 +123,11 @@ describe('Login Component', () => {
     formHelpers.populateFormField(sut, 'password')
     formHelpers.populateFormField(sut, 'passwordConfirmation')
     formHelpers.testButtonIsDisabled(sut, 'submit', false)
+  })
+
+  test('Should show spinner on submit', () => {
+    const { sut } = makeSut()
+    simulateValidSubmit(sut)
+    testElementExists(sut, 'spinner')
   })
 })
