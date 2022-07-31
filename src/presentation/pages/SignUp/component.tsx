@@ -53,6 +53,12 @@ export const SignUp = ({ validation }: Props) => {
     })
   }, [state.name.value, state.email.value, state.password.value, state.passwordConfirmation.value])
 
+  const isButtonDisabled =
+    !!state.name.errorMessage ||
+    !!state.email.errorMessage ||
+    !!state.password.errorMessage ||
+    !!state.passwordConfirmation.errorMessage
+
   return (
     <div className={Styles.signup}>
       <LoginHeader />
@@ -65,7 +71,7 @@ export const SignUp = ({ validation }: Props) => {
           <Input type="password" name="password" placeholder="Digite sua senha" />
           <Input type="password" name="passwordConfirmation" placeholder="Confirme sua senha" />
 
-          <button data-testid="submit" disabled type="submit" className={Styles.submit} >
+          <button data-testid="submit" type="submit" className={Styles.submit} disabled={isButtonDisabled} >
             Criar
           </button>
 
