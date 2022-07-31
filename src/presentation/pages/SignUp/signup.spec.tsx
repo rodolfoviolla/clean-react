@@ -90,4 +90,10 @@ describe('Login Component', () => {
     formHelpers.populateFormField(sut, 'password')
     formHelpers.testStatusField(sut, 'password')
   })
+
+  test('Should show valid passwordConfirmation state if Validation succeeds', () => {
+    const { sut } = makeSut()
+    formHelpers.populateFormField(sut, 'passwordConfirmation')
+    formHelpers.testStatusField(sut, 'passwordConfirmation')
+  })
 })
