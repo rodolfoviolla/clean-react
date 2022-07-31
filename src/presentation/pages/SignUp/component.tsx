@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 
+import { AddAccount } from '@/domain/useCases'
 import { Footer, FormStatus, Input, LoginHeader } from '@/presentation/components'
 import { FormContext } from '@/presentation/contexts'
 import { Validation } from '@/presentation/protocols'
@@ -9,9 +10,10 @@ import Styles from './styles.scss'
 
 type Props = {
   validation?: Validation
+  addAccount?: AddAccount
 }
 
-export const SignUp = ({ validation }: Props) => {
+export const SignUp = ({ validation, addAccount }: Props) => {
   const [state, setState] = useState({
     isLoading: false,
     name: {
@@ -57,6 +59,12 @@ export const SignUp = ({ validation }: Props) => {
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault()
     setState({ ...state, isLoading: true })
+    await addAccount.add({
+      name: state.name.value,
+      email: state.email.value,
+      password: state.password.value,
+      passwordConfirmation: state.passwordConfirmation.value
+    })
   }
 
   const isButtonDisabled =
