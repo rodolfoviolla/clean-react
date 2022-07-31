@@ -9,7 +9,7 @@ const makeSut = () => {
   const valueToCompare = faker.random.word()
   const sut = new CompareFieldsValidation(fieldName, valueToCompare)
 
-  return { sut, fieldName }
+  return { sut, fieldName, valueToCompare }
 }
 
 describe('CompareFieldsValidation', () => {
@@ -17,5 +17,11 @@ describe('CompareFieldsValidation', () => {
     const { sut, fieldName } = makeSut()
     const error = sut.validate(faker.random.word())
     expect(error).toEqual(new InvalidFieldError(fieldName))
+  })
+
+  test('Should return falsy if comparison is valid', () => {
+    const { sut, valueToCompare } = makeSut()
+    const error = sut.validate(valueToCompare)
+    expect(error).toBeFalsy()
   })
 })
