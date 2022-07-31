@@ -1,4 +1,5 @@
 export * from './builder/validationBuilder'
+export * from './compareFields/compareFieldsValidation'
 export * from './composite/validationComposite'
 export * from './email/emailValidation'
 export * from './minLength/minLengthValidation'
