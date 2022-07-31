@@ -1,15 +1,21 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 
 import { Footer, FormStatus, Input, LoginHeader } from '@/presentation/components'
 import { FormContext } from '@/presentation/contexts'
+import { Validation } from '@/presentation/protocols'
 
 import Styles from './styles.scss'
 
-export const SignUp = () => {
-  const state = useState({
+type Props = {
+  validation?: Validation
+}
+
+export const SignUp = ({ validation }: Props) => {
+  const [state, setState] = useState({
     name: {
-      errorMessage: 'Campo obrigatório'
+      value: '',
+      errorMessage: ''
     },
     email: {
       errorMessage: 'Campo obrigatório'
@@ -22,11 +28,22 @@ export const SignUp = () => {
     }
   })
 
+  useEffect(() => {
+    setState({
+      ...state,
+      name: {
+        ...state.name,
+        errorMessage: validation.validate('name', state.name.value)
+
+      }
+    })
+  }, [state.name.value])
+
   return (
     <div className={Styles.signup}>
       <LoginHeader />
 
-      <FormContext.Provider value={state}>
+      <FormContext.Provider value={[state, setState]}>
         <form className={Styles.form}>
           <h2>Criar conta</h2>
           <Input type="text" name="name" placeholder="Digite seu nome" />
