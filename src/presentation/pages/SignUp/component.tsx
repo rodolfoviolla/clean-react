@@ -59,7 +59,15 @@ export const SignUp = ({ validation, addAccount }: Props) => {
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault()
 
-    if (state.isLoading) return
+    if (
+      state.isLoading ||
+      state.name.errorMessage ||
+      state.email.errorMessage ||
+      state.password.errorMessage ||
+      state.passwordConfirmation.errorMessage
+    ) {
+      return
+    }
 
     setState({ ...state, isLoading: true })
 
@@ -82,7 +90,7 @@ export const SignUp = ({ validation, addAccount }: Props) => {
       <LoginHeader />
 
       <FormContext.Provider value={[state, setState]}>
-        <form className={Styles.form} onSubmit={handleSubmit}>
+        <form data-testid="form" className={Styles.form} onSubmit={handleSubmit}>
           <h2>Criar conta</h2>
           <Input type="text" name="name" placeholder="Digite seu nome" />
           <Input type="email" name="email" placeholder="Digite seu e-mail" />
