@@ -2,7 +2,7 @@ import React from 'react'
 import { Router } from 'react-router-dom'
 import { createMemoryHistory } from 'history'
 import { faker } from '@faker-js/faker'
-import { cleanup, render, RenderResult } from '@testing-library/react'
+import { cleanup, fireEvent, render, RenderResult } from '@testing-library/react'
 
 import { SignUp } from '@/presentation/pages'
 import { AddAccountSpy, formHelpers, ValidationStub } from '@/presentation/test'
@@ -115,9 +115,9 @@ describe('Login Component', () => {
     formHelpers.testButtonIsDisabled(sut, 'submit', false)
   })
 
-  test('Should show spinner on submit', () => {
+  test('Should show spinner on submit', async () => {
     const { sut } = makeSut()
-    simulateValidSubmit(sut)
+    await simulateValidSubmit(sut)
     formHelpers.testElementExists(sut, 'spinner')
   })
 
@@ -127,10 +127,17 @@ describe('Login Component', () => {
     expect(addAccountSpy.params).toEqual(fields)
   })
 
-  test('Should call AddAccount only once', () => {
+  test('Should call AddAccount only once', async () => {
     const { sut, addAccountSpy } = makeSut()
-    simulateValidSubmit(sut)
-    simulateValidSubmit(sut)
+    await simulateValidSubmit(sut)
+    await simulateValidSubmit(sut)
     expect(addAccountSpy.callsCount).toBe(1)
+  })
+
+  test('Should not call AddAccount if form is invalid', async () => {
+    const validationError = faker.random.words()
+    const { sut, addAccountSpy } = makeSut({ validationError })
+    fireEvent.submit(sut.getByTestId('form'))
+    expect(addAccountSpy.callsCount).toBe(0)
   })
 })
