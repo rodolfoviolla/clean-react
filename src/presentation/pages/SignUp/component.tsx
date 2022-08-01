@@ -16,6 +16,7 @@ type Props = {
 export const SignUp = ({ validation, addAccount }: Props) => {
   const [state, setState] = useState({
     isLoading: false,
+    errorMessage: '',
     name: {
       value: '',
       errorMessage: ''
@@ -59,24 +60,32 @@ export const SignUp = ({ validation, addAccount }: Props) => {
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault()
 
-    if (
-      state.isLoading ||
+    try {
+      if (
+        state.isLoading ||
       state.name.errorMessage ||
       state.email.errorMessage ||
       state.password.errorMessage ||
       state.passwordConfirmation.errorMessage
-    ) {
-      return
+      ) {
+        return
+      }
+
+      setState({ ...state, isLoading: true })
+
+      await addAccount.add({
+        name: state.name.value,
+        email: state.email.value,
+        password: state.password.value,
+        passwordConfirmation: state.passwordConfirmation.value
+      })
+    } catch (error) {
+      setState({
+        ...state,
+        isLoading: false,
+        errorMessage: error.message
+      })
     }
-
-    setState({ ...state, isLoading: true })
-
-    await addAccount.add({
-      name: state.name.value,
-      email: state.email.value,
-      password: state.password.value,
-      passwordConfirmation: state.passwordConfirmation.value
-    })
   }
 
   const isButtonDisabled =
