@@ -37,11 +37,6 @@ const simulateValidSubmit = async (sut: RenderResult, waitForCallback?: () => vo
   )
 }
 
-const testElementText = (sut: RenderResult, elementTestId: string, text: string) => {
-  const element = sut.getByTestId(elementTestId)
-  expect(element.textContent).toBe(text)
-}
-
 describe('Login Component', () => {
   afterEach(cleanup)
 
@@ -153,7 +148,7 @@ describe('Login Component', () => {
     jest.spyOn(addAccountSpy, 'add').mockRejectedValueOnce(error)
     await simulateValidSubmit(sut, () => {
       formHelpers.testElementChildCount(sut, 'error-wrap', 1)
-      testElementText(sut, 'error-message', error.message)
+      formHelpers.testElementText(sut, 'error-message', error.message)
     })
   })
 })
