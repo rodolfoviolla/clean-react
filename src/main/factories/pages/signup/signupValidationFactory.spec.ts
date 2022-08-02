@@ -1,10 +1,10 @@
 import { ValidationBuilder, ValidationComposite } from '@/validation/validators'
 
-import { makeValidation } from './signupValidationFactory'
+import { makeSignUpValidation } from './signupValidationFactory'
 
 describe('SignUpValidationFactory', () => {
   test('Should make ValidationComposite with correct validation', () => {
-    const composite = makeValidation()
+    const composite = makeSignUpValidation()
     expect(composite).toEqual(ValidationComposite.build([
       ...ValidationBuilder.field('name').required().min(5).build(),
       ...ValidationBuilder.field('email').required().email().build(),

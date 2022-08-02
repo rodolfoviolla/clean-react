@@ -9,9 +9,9 @@ import { Validation } from '@/presentation/protocols'
 import Styles from './styles.scss'
 
 type Props = {
-  validation?: Validation
-  addAccount?: AddAccount
-  saveAccessToken?: SaveAccessToken
+  validation: Validation
+  addAccount: AddAccount
+  saveAccessToken: SaveAccessToken
 }
 
 export const SignUp = ({ validation, addAccount, saveAccessToken }: Props) => {
