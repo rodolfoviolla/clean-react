@@ -115,7 +115,7 @@ export const SignUp = ({ validation, addAccount, saveAccessToken }: Props) => {
             Criar
           </button>
 
-          <Link className={Styles.link} to="/login">Voltar para o login</Link>
+          <Link data-testid="login" className={Styles.link} replace to="/login">Voltar para o login</Link>
 
           <FormStatus />
         </form>
