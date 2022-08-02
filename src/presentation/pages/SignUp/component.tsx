@@ -39,10 +39,17 @@ export const SignUp = ({ validation, addAccount, saveAccessToken }: Props) => {
   })
 
   useEffect(() => {
-    const nameErrorMessage = validation.validate('name', state.name.value)
-    const emailErrorMessage = validation.validate('email', state.email.value)
-    const passwordErrorMessage = validation.validate('password', state.password.value)
-    const passwordConfirmationErrorMessage = validation.validate('passwordConfirmation', state.passwordConfirmation.value)
+    const formData = {
+      name: state.name.value,
+      email: state.email.value,
+      password: state.password.value,
+      passwordConfirmation: state.passwordConfirmation.value
+    }
+
+    const nameErrorMessage = validation.validate('name', formData)
+    const emailErrorMessage = validation.validate('email', formData)
+    const passwordErrorMessage = validation.validate('password', formData)
+    const passwordConfirmationErrorMessage = validation.validate('passwordConfirmation', formData)
 
     setState({
       ...state,

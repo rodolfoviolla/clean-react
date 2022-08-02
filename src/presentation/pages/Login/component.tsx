@@ -31,8 +31,13 @@ export const Login = ({ validation, authentication, saveAccessToken }: LoginProp
   })
 
   useEffect(() => {
-    const emailErrorMessage = validation.validate('email', state.email.value)
-    const passwordErrorMessage = validation.validate('password', state.password.value)
+    const formData = {
+      email: state.email.value,
+      password: state.password.value
+    }
+
+    const emailErrorMessage = validation.validate('email', formData)
+    const passwordErrorMessage = validation.validate('password', formData)
 
     setState({
       ...state,
