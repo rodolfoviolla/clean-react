@@ -171,4 +171,12 @@ describe('Login Component', () => {
       formHelpers.testElementText(sut, 'error-message', error.message)
     })
   })
+
+  test('Should go to Login page', async () => {
+    const { sut } = makeSut()
+    const loginLink = sut.getByTestId('login')
+    fireEvent.click(loginLink)
+    expect(history.index).toBe(0)
+    expect(history.location.pathname).toBe('/login')
+  })
 })
