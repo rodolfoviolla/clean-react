@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 
 import { AddAccount, SaveAccessToken } from '@/domain/useCases'
-import { Footer, FormStatus, Input, LoginHeader } from '@/presentation/components'
+import { Footer, FormStatus, Input, LoginHeader, SubmitButton } from '@/presentation/components'
 import { FormContext } from '@/presentation/contexts'
 import { Validation } from '@/presentation/protocols'
 
@@ -18,6 +18,7 @@ export const SignUp = ({ validation, addAccount, saveAccessToken }: Props) => {
   const navigate = useNavigate()
   const [state, setState] = useState({
     isLoading: false,
+    isFormInvalid: true,
     errorMessage: '',
     name: {
       value: '',
@@ -38,24 +39,34 @@ export const SignUp = ({ validation, addAccount, saveAccessToken }: Props) => {
   })
 
   useEffect(() => {
+    const nameErrorMessage = validation.validate('name', state.name.value)
+    const emailErrorMessage = validation.validate('email', state.email.value)
+    const passwordErrorMessage = validation.validate('password', state.password.value)
+    const passwordConfirmationErrorMessage = validation.validate('passwordConfirmation', state.passwordConfirmation.value)
+
     setState({
       ...state,
       name: {
         ...state.name,
-        errorMessage: validation.validate('name', state.name.value)
+        errorMessage: nameErrorMessage
       },
       email: {
         ...state.email,
-        errorMessage: validation.validate('email', state.email.value)
+        errorMessage: emailErrorMessage
       },
       password: {
         ...state.password,
-        errorMessage: validation.validate('password', state.password.value)
+        errorMessage: passwordErrorMessage
       },
       passwordConfirmation: {
         ...state.passwordConfirmation,
-        errorMessage: validation.validate('passwordConfirmation', state.passwordConfirmation.value)
-      }
+        errorMessage: passwordConfirmationErrorMessage
+      },
+      isFormInvalid:
+        !!nameErrorMessage ||
+        !!emailErrorMessage ||
+        !!passwordErrorMessage ||
+        !!passwordConfirmationErrorMessage
     })
   }, [state.name.value, state.email.value, state.password.value, state.passwordConfirmation.value])
 
@@ -63,15 +74,7 @@ export const SignUp = ({ validation, addAccount, saveAccessToken }: Props) => {
     event.preventDefault()
 
     try {
-      if (
-        state.isLoading ||
-      state.name.errorMessage ||
-      state.email.errorMessage ||
-      state.password.errorMessage ||
-      state.passwordConfirmation.errorMessage
-      ) {
-        return
-      }
+      if (state.isLoading || state.isFormInvalid) return
 
       setState({ ...state, isLoading: true })
 
@@ -83,6 +86,7 @@ export const SignUp = ({ validation, addAccount, saveAccessToken }: Props) => {
       })
 
       await saveAccessToken.save(accessToken)
+
       navigate('/', { replace: true })
     } catch (error) {
       setState({
@@ -92,12 +96,6 @@ export const SignUp = ({ validation, addAccount, saveAccessToken }: Props) => {
       })
     }
   }
-
-  const isButtonDisabled =
-    !!state.name.errorMessage ||
-    !!state.email.errorMessage ||
-    !!state.password.errorMessage ||
-    !!state.passwordConfirmation.errorMessage
 
   return (
     <div className={Styles.signup}>
@@ -111,9 +109,7 @@ export const SignUp = ({ validation, addAccount, saveAccessToken }: Props) => {
           <Input type="password" name="password" placeholder="Digite sua senha" />
           <Input type="password" name="passwordConfirmation" placeholder="Confirme sua senha" />
 
-          <button data-testid="submit" type="submit" className={Styles.submit} disabled={isButtonDisabled} >
-            Criar
-          </button>
+          <SubmitButton text='Cadastrar' />
 
           <Link data-testid="login" className={Styles.link} replace to="/login">Voltar para o login</Link>
 

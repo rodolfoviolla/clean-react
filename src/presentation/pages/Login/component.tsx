@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 
 import { Authentication, SaveAccessToken } from '@/domain/useCases'
-import { Footer, FormStatus, Input, LoginHeader } from '@/presentation/components'
+import { Footer, FormStatus, Input, LoginHeader, SubmitButton } from '@/presentation/components'
 import { FormContext } from '@/presentation/contexts'
 import { Validation } from '@/presentation/protocols'
 
@@ -18,6 +18,7 @@ export const Login = ({ validation, authentication, saveAccessToken }: LoginProp
   const navigate = useNavigate()
   const [state, setState] = useState({
     isLoading: false,
+    isFormInvalid: true,
     errorMessage: '',
     email: {
       value: '',
@@ -30,17 +31,20 @@ export const Login = ({ validation, authentication, saveAccessToken }: LoginProp
   })
 
   useEffect(() => {
+    const emailErrorMessage = validation.validate('email', state.email.value)
+    const passwordErrorMessage = validation.validate('password', state.password.value)
+
     setState({
       ...state,
       email: {
         ...state.email,
-        errorMessage: validation.validate('email', state.email.value)
-
+        errorMessage: emailErrorMessage
       },
       password: {
         ...state.password,
-        errorMessage: validation.validate('password', state.password.value)
-      }
+        errorMessage: passwordErrorMessage
+      },
+      isFormInvalid: !!emailErrorMessage || !!passwordErrorMessage
     })
   }, [state.email.value, state.password.value])
 
@@ -48,12 +52,14 @@ export const Login = ({ validation, authentication, saveAccessToken }: LoginProp
     event.preventDefault()
 
     try {
-      if (state.isLoading || state.email.errorMessage || state.password.errorMessage) return
+      if (state.isLoading || state.isFormInvalid) return
 
       setState({ ...state, isLoading: true })
 
       const account = await authentication.auth({ email: state.email.value, password: state.password.value })
+
       await saveAccessToken.save(account.accessToken)
+
       navigate('/', { replace: true })
     } catch (error) {
       setState({ ...state, isLoading: false, errorMessage: error.message })
@@ -70,14 +76,7 @@ export const Login = ({ validation, authentication, saveAccessToken }: LoginProp
           <Input type="email" name="email" placeholder="Digite seu e-mail" />
           <Input type="password" name="password" placeholder="Digite sua senha" />
 
-          <button
-            data-testid="submit"
-            disabled={!!state.email.errorMessage || !!state.password.errorMessage}
-            type="submit"
-            className={Styles.submit}
-          >
-            Entrar
-          </button>
+          <SubmitButton text='Entrar' />
 
           <Link data-testid="signup" className={Styles.link} to="/signup">Criar conta</Link>
 
