@@ -161,4 +161,14 @@ describe('Login Component', () => {
       expect(history.location.pathname).toBe('/')
     })
   })
+
+  test('Should present error if SaveAccessToken fails', async () => {
+    const { sut, saveAccessTokenMock } = makeSut()
+    const error = new Error(faker.random.words())
+    jest.spyOn(saveAccessTokenMock, 'save').mockRejectedValueOnce(error)
+    await simulateValidSubmit(sut, () => {
+      formHelpers.testElementChildCount(sut, 'error-wrap', 1)
+      formHelpers.testElementText(sut, 'error-message', error.message)
+    })
+  })
 })
