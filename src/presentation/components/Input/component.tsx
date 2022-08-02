@@ -8,8 +8,8 @@ type InputProps = React.DetailedHTMLProps<React.InputHTMLAttributes<HTMLInputEle
 
 export const Input = (props: InputProps) => {
   const [state, setState] = useContext(FormContext)
-  const inputName = props?.name
-  const errorMessage = state?.[inputName]?.errorMessage
+  const inputName = props.name
+  const errorMessage = state[inputName].errorMessage
 
   const getStatus = () => {
     return errorMessage ? '🔴' : '🟢'
