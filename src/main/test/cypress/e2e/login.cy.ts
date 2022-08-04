@@ -60,4 +60,16 @@ describe('Login', () => {
       .getByTestId('error-message').should('contain.text', 'Credenciais inválidas')
     cy.url().should('equal', `${baseUrl}/login`)
   })
+
+  it('Should save accessToken if valid credentials are provided', () => {
+    cy.getByTestId('email').type('mango@gmail.com')
+    cy.getByTestId('password').type('12345')
+    cy.getByTestId('submit').click()
+    cy.getByTestId('error-wrap')
+      .getByTestId('spinner').should('exist')
+      .getByTestId('error-message').should('not.exist')
+      .getByTestId('spinner').should('not.exist')
+    cy.url().should('equal', `${baseUrl}/`)
+    cy.window().then(window => assert.isOk(window.localStorage.getItem('accessToken')))
+  })
 })
