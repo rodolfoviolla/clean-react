@@ -10,9 +10,11 @@ describe('Login', () => {
   it('Should load with correct initial state', () => {
     cy.getByTestId('email-wrap').should('have.attr', 'data-status', 'invalid')
     cy.getByTestId('email').should('have.attr', 'title', 'Campo obrigatório')
+    cy.getByTestId('email-label').should('have.attr', 'title', 'Campo obrigatório')
 
     cy.getByTestId('password-wrap').should('have.attr', 'data-status', 'invalid')
     cy.getByTestId('password').should('have.attr', 'title', 'Campo obrigatório')
+    cy.getByTestId('password-label').should('have.attr', 'title', 'Campo obrigatório')
 
     cy.getByTestId('submit').should('have.attr', 'disabled')
     cy.getByTestId('error-wrap').should('not.have.descendants')
@@ -22,10 +24,14 @@ describe('Login', () => {
     cy.getByTestId('email')
       .type(faker.random.word())
       .should('have.attr', 'title', 'EMAIL: Campo inválido')
+    cy.getByTestId('email-label')
+      .should('have.attr', 'title', 'EMAIL: Campo inválido')
     cy.getByTestId('email-wrap').should('have.attr', 'data-status', 'invalid')
 
     cy.getByTestId('password')
       .type(faker.random.alphaNumeric(3))
+      .should('have.attr', 'title', 'PASSWORD: Campo inválido')
+    cy.getByTestId('password-label')
       .should('have.attr', 'title', 'PASSWORD: Campo inválido')
     cy.getByTestId('password-wrap').should('have.attr', 'data-status', 'invalid')
 
@@ -37,10 +43,14 @@ describe('Login', () => {
     cy.getByTestId('email')
       .type(faker.internet.email())
       .should('not.have.attr', 'title')
+    cy.getByTestId('email-label')
+      .should('not.have.attr', 'title')
     cy.getByTestId('email-wrap').should('have.attr', 'data-status', 'valid')
 
     cy.getByTestId('password')
       .type(faker.random.alphaNumeric(5))
+      .should('not.have.attr', 'title')
+    cy.getByTestId('password-label')
       .should('not.have.attr', 'title')
     cy.getByTestId('password-wrap').should('have.attr', 'data-status', 'valid')
 
