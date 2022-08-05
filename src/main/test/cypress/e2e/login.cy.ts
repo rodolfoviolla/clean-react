@@ -79,8 +79,7 @@ describe('Login', () => {
     cy.intercept('POST', /login/, { statusCode: 200, body: { [faker.database.column()]: faker.datatype.uuid() } })
 
     cy.getByTestId('email').type(faker.internet.email())
-    cy.getByTestId('password').type(faker.internet.password(5))
-    cy.getByTestId('submit').click()
+    cy.getByTestId('password').type(faker.internet.password(5)).type('{enter}')
 
     cy.getByTestId('spinner').should('not.exist')
     cy.getByTestId('error-message').should('contain.text', 'Ocorreu um erro inesperado. Tente novamente mais tarde')
