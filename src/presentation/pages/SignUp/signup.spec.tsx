@@ -46,10 +46,10 @@ describe('Login Component', () => {
     const { sut } = makeSut({ validationError })
     formHelpers.testElementChildCount(sut, 'error-wrap', 0)
     formHelpers.testButtonIsDisabled(sut, 'submit', true)
-    formHelpers.testStatusField(sut, 'name', validationError)
-    formHelpers.testStatusField(sut, 'email', validationError)
-    formHelpers.testStatusField(sut, 'password', validationError)
-    formHelpers.testStatusField(sut, 'passwordConfirmation', validationError)
+    formHelpers.testInputFieldElements(sut, 'name', validationError)
+    formHelpers.testInputFieldElements(sut, 'email', validationError)
+    formHelpers.testInputFieldElements(sut, 'password', validationError)
+    formHelpers.testInputFieldElements(sut, 'passwordConfirmation', validationError)
   })
 
   test('Should show name error if Validation fails', () => {
@@ -57,7 +57,7 @@ describe('Login Component', () => {
     const { sut } = makeSut({ validationError })
     const fieldName = 'name'
     formHelpers.populateFormField(sut, fieldName)
-    formHelpers.testStatusField(sut, fieldName, validationError)
+    formHelpers.testInputFieldElements(sut, fieldName, validationError)
   })
 
   test('Should show email error if Validation fails', () => {
@@ -65,7 +65,7 @@ describe('Login Component', () => {
     const { sut } = makeSut({ validationError })
     const fieldName = 'email'
     formHelpers.populateFormField(sut, fieldName)
-    formHelpers.testStatusField(sut, fieldName, validationError)
+    formHelpers.testInputFieldElements(sut, fieldName, validationError)
   })
 
   test('Should show password error if Validation fails', () => {
@@ -73,7 +73,7 @@ describe('Login Component', () => {
     const { sut } = makeSut({ validationError })
     const fieldName = 'password'
     formHelpers.populateFormField(sut, fieldName)
-    formHelpers.testStatusField(sut, fieldName, validationError)
+    formHelpers.testInputFieldElements(sut, fieldName, validationError)
   })
 
   test('Should show passwordConfirmation error if Validation fails', () => {
@@ -81,31 +81,31 @@ describe('Login Component', () => {
     const { sut } = makeSut({ validationError })
     const fieldName = 'passwordConfirmation'
     formHelpers.populateFormField(sut, fieldName)
-    formHelpers.testStatusField(sut, fieldName, validationError)
+    formHelpers.testInputFieldElements(sut, fieldName, validationError)
   })
 
   test('Should show valid name state if Validation succeeds', () => {
     const { sut } = makeSut()
     formHelpers.populateFormField(sut, 'name')
-    formHelpers.testStatusField(sut, 'name')
+    formHelpers.testInputFieldElements(sut, 'name')
   })
 
   test('Should show valid email state if Validation succeeds', () => {
     const { sut } = makeSut()
     formHelpers.populateFormField(sut, 'email')
-    formHelpers.testStatusField(sut, 'email')
+    formHelpers.testInputFieldElements(sut, 'email')
   })
 
   test('Should show valid password state if Validation succeeds', () => {
     const { sut } = makeSut()
     formHelpers.populateFormField(sut, 'password')
-    formHelpers.testStatusField(sut, 'password')
+    formHelpers.testInputFieldElements(sut, 'password')
   })
 
   test('Should show valid passwordConfirmation state if Validation succeeds', () => {
     const { sut } = makeSut()
     formHelpers.populateFormField(sut, 'passwordConfirmation')
-    formHelpers.testStatusField(sut, 'passwordConfirmation')
+    formHelpers.testInputFieldElements(sut, 'passwordConfirmation')
   })
 
   test('Should enable submit button if form is valid', () => {

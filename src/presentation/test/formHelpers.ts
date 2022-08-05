@@ -18,10 +18,14 @@ export const testButtonIsDisabled = (sut: RenderResult, elementTestId: string, i
   expect(button.disabled).toBe(isDisabled)
 }
 
-export const testStatusField = (sut: RenderResult, fieldName: string, validationError?: string) => {
-  const statusElement = sut.getByTestId(`${fieldName}-status`)
-  expect(statusElement.title).toBe(validationError || 'Tudo certo')
-  expect(statusElement.textContent).toBe(validationError ? '🔴' : '🟢')
+export const testInputFieldElements = (sut: RenderResult, fieldName: string, validationError: string = '') => {
+  const fieldWrap = sut.getByTestId(`${fieldName}-wrap`)
+  const fieldElement = sut.getByTestId(fieldName)
+  const fieldLabel = sut.getByTestId(`${fieldName}-label`)
+
+  expect(fieldWrap.getAttribute('data-status')).toBe(validationError ? 'invalid' : 'valid')
+  expect(fieldElement.title).toBe(validationError)
+  expect(fieldLabel.title).toBe(validationError)
 }
 
 export const populateFormField = ({ getByTestId }: RenderResult, name: string) => {

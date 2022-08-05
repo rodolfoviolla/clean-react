@@ -12,20 +12,21 @@ export const Input = ({ placeholder, ...props }: InputProps) => {
   const errorMessage = state[props.name].errorMessage
 
   return (
-    <div className={Styles.inputWrap}>
+    <div
+      data-testid={`${props.name}-wrap`}
+      data-status={errorMessage ? 'invalid' : 'valid'}
+      className={Styles.inputWrap}
+    >
       <input
-        ref={inputRef}
-        {...props}
-        placeholder=" "
         data-testid={props.name}
+        {...props}
+        ref={inputRef}
+        title={errorMessage}
+        placeholder=" "
         onChange={(event) => setState({ ...state, [event.target.name]: { value: event.target.value } })}
       />
 
-      <label onClick={() => inputRef.current.focus()}>{placeholder}</label>
-
-      <span data-testid={`${props.name}-status`} title={errorMessage || 'Tudo certo'} className={Styles.status}>
-        {errorMessage ? '🔴' : '🟢'}
-      </span>
+      <label data-testid={`${props.name}-label`} title={errorMessage} onClick={() => inputRef.current.focus()}>{placeholder}</label>
     </div>
   )
 }
