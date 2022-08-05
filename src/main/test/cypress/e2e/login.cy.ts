@@ -61,6 +61,20 @@ describe('Login', () => {
     cy.url().should('equal', `${baseUrl}/login`)
   })
 
+  it('Should present UnexpectedError on any other errors', () => {
+    cy.intercept('POST', /login/, {
+      statusCode: faker.internet.httpStatusCode({ types: ['serverError', 'clientError'] })
+    })
+
+    cy.getByTestId('email').type(faker.internet.email())
+    cy.getByTestId('password').type(faker.random.alphaNumeric(5))
+    cy.getByTestId('submit').click()
+
+    cy.getByTestId('spinner').should('not.exist')
+    cy.getByTestId('error-message').should('contain.text', 'Ocorreu um erro inesperado. Tente novamente mais tarde')
+    cy.url().should('equal', `${baseUrl}/login`)
+  })
+
   it('Should save accessToken if valid credentials are provided', () => {
     cy.intercept('POST', /login/, { statusCode: 200, body: { accessToken: faker.datatype.uuid() } })
 
