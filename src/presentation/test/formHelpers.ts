@@ -23,6 +23,9 @@ export const testInputFieldElements = (sut: RenderResult, fieldName: string, val
   const fieldElement = sut.getByTestId(fieldName)
   const fieldLabel = sut.getByTestId(`${fieldName}-label`)
 
+  fireEvent.click(fieldLabel)
+  expect(document.activeElement).toBe(fieldElement)
+
   expect(fieldWrap.getAttribute('data-status')).toBe(validationError ? 'invalid' : 'valid')
   expect(fieldElement.title).toBe(validationError)
   expect(fieldLabel.title).toBe(validationError)

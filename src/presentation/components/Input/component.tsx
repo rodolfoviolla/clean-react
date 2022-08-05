@@ -26,7 +26,13 @@ export const Input = ({ placeholder, ...props }: InputProps) => {
         onChange={(event) => setState({ ...state, [event.target.name]: { value: event.target.value } })}
       />
 
-      <label data-testid={`${props.name}-label`} title={errorMessage} onClick={() => inputRef.current.focus()}>{placeholder}</label>
+      <label
+        data-testid={`${props.name}-label`}
+        title={errorMessage}
+        onClick={() => inputRef.current.focus()}
+      >
+        {placeholder}
+      </label>
     </div>
   )
 }
