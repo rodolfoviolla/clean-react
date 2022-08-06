@@ -12,7 +12,8 @@ const makeValidSubmit = () => {
   formHelpers.testInputElements('password')
   cy.getByTestId('passwordConfirmation').type(password)
   formHelpers.testInputElements('passwordConfirmation')
-  cy.getByTestId('submit').click()
+
+  return { submit: () => cy.getByTestId('submit').click() }
 }
 
 describe('SignUp', () => {
@@ -45,23 +46,14 @@ describe('SignUp', () => {
   })
 
   it('Should present valid state if form is valid', () => {
-    cy.getByTestId('name').type(faker.name.findName())
-    formHelpers.testInputElements('name')
-    cy.getByTestId('email').type(faker.internet.email())
-    formHelpers.testInputElements('email')
-    const password = faker.internet.password(5)
-    cy.getByTestId('password').type(password)
-    formHelpers.testInputElements('password')
-    cy.getByTestId('passwordConfirmation').type(password)
-    formHelpers.testInputElements('passwordConfirmation')
-
+    makeValidSubmit()
     cy.getByTestId('submit').should('not.have.attr', 'disabled')
     cy.getByTestId('error-wrap').should('not.have.descendants')
   })
 
   it('Should present EmailInUseError on 403', () => {
     cy.intercept('POST', /signup/, { statusCode: 403 })
-    makeValidSubmit()
+    makeValidSubmit().submit()
     formHelpers.testErrorMessage('Este e-mail está em uso')
     formHelpers.testUrl('/signup')
   })
