@@ -72,4 +72,13 @@ describe('SignUp', () => {
     formHelpers.testErrorMessage('Ocorreu um erro inesperado. Tente novamente mais tarde')
     formHelpers.testUrl('/signup')
   })
+
+  it('Should save accessToken if valid credentials are provided', () => {
+    cy.intercept('POST', /signup/, { statusCode: 200, body: { accessToken: faker.datatype.uuid() } })
+    makeValidSubmit().submit()
+    cy.getByTestId('spinner').should('not.exist')
+    cy.getByTestId('errorMessage').should('not.exist')
+    formHelpers.testLocalStorageItem('accessToken')
+    formHelpers.testUrl('/')
+  })
 })
