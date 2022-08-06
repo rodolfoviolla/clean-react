@@ -9,7 +9,7 @@ type InputProps = React.DetailedHTMLProps<React.InputHTMLAttributes<HTMLInputEle
 export const Input = ({ placeholder, ...props }: InputProps) => {
   const inputRef = useRef<HTMLInputElement>()
   const [state, setState] = useContext(FormContext)
-  const errorMessage = state[props.name].errorMessage
+  const errorMessage = state?.[props.name]?.errorMessage
 
   return (
     <div
