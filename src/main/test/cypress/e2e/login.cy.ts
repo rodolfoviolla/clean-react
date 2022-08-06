@@ -23,10 +23,10 @@ describe('Login', () => {
 
   it('Should present error state if form is invalid', () => {
     cy.getByTestId('email').type(faker.random.word())
-    formHelpers.testInputElements('email', 'EMAIL: Campo inválido')
+    formHelpers.testInputElements('email', 'Campo inválido')
 
     cy.getByTestId('password').type(faker.random.alphaNumeric(3))
-    formHelpers.testInputElements('password', 'PASSWORD: Campo inválido')
+    formHelpers.testInputElements('password', 'Campo inválido')
 
     cy.getByTestId('submit').should('have.attr', 'disabled')
     cy.getByTestId('error-wrap').should('not.have.descendants')
