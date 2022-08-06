@@ -65,4 +65,11 @@ describe('SignUp', () => {
     formHelpers.testErrorMessage('Ocorreu um erro inesperado. Tente novamente mais tarde')
     formHelpers.testUrl('/signup')
   })
+
+  it('Should present UnexpectedError if invalid data are provided', () => {
+    cy.intercept('POST', /signup/, { statusCode: 200, body: { [faker.database.column()]: faker.random.word() } })
+    makeValidSubmit().submit()
+    formHelpers.testErrorMessage('Ocorreu um erro inesperado. Tente novamente mais tarde')
+    formHelpers.testUrl('/signup')
+  })
 })
