@@ -1,6 +1,7 @@
 import { faker } from '@faker-js/faker'
 
 import * as formHelpers from '../support/formHelpers'
+import { getAnyOtherErrorStatusCodeThan } from '../support/mockHttp'
 
 const makeValidSubmit = () => {
   cy.getByTestId('name').type(faker.name.findName())
@@ -55,6 +56,13 @@ describe('SignUp', () => {
     cy.intercept('POST', /signup/, { statusCode: 403 })
     makeValidSubmit().submit()
     formHelpers.testErrorMessage('Este e-mail está em uso')
+    formHelpers.testUrl('/signup')
+  })
+
+  it('Should present UnexpectedError on any other errors', () => {
+    cy.intercept('POST', /signup/, { statusCode: getAnyOtherErrorStatusCodeThan([403]) })
+    makeValidSubmit().submit()
+    formHelpers.testErrorMessage('Ocorreu um erro inesperado. Tente novamente mais tarde')
     formHelpers.testUrl('/signup')
   })
 })
