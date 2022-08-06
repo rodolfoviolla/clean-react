@@ -3,7 +3,7 @@ import { faker } from '@faker-js/faker'
 import * as formHelpers from '../support/formHelpers'
 import { getAnyOtherErrorStatusCodeThan } from '../support/mockHttp'
 
-const makeValidSubmit = () => {
+const populateFieldsWithValidValues = () => {
   cy.getByTestId('name').type(faker.name.findName())
   formHelpers.testInputElements('name')
   cy.getByTestId('email').type(faker.internet.email())
@@ -14,7 +14,10 @@ const makeValidSubmit = () => {
   cy.getByTestId('passwordConfirmation').type(password)
   formHelpers.testInputElements('passwordConfirmation')
 
-  return { submit: () => cy.getByTestId('submit').click() }
+  return {
+    submitWithClick: () => cy.getByTestId('submit').click(),
+    submitWithEnter: () => cy.getByTestId('passwordConfirmation').type('{enter}')
+  }
 }
 
 describe('SignUp', () => {
@@ -47,35 +50,35 @@ describe('SignUp', () => {
   })
 
   it('Should present valid state if form is valid', () => {
-    makeValidSubmit()
+    populateFieldsWithValidValues()
     cy.getByTestId('submit').should('not.have.attr', 'disabled')
     cy.getByTestId('error-wrap').should('not.have.descendants')
   })
 
   it('Should present EmailInUseError on 403', () => {
     cy.intercept('POST', /signup/, { statusCode: 403 })
-    makeValidSubmit().submit()
+    populateFieldsWithValidValues().submitWithClick()
     formHelpers.testErrorMessage('Este e-mail está em uso')
     formHelpers.testUrl('/signup')
   })
 
   it('Should present UnexpectedError on any other errors', () => {
     cy.intercept('POST', /signup/, { statusCode: getAnyOtherErrorStatusCodeThan([403]) })
-    makeValidSubmit().submit()
+    populateFieldsWithValidValues().submitWithClick()
     formHelpers.testErrorMessage('Ocorreu um erro inesperado. Tente novamente mais tarde')
     formHelpers.testUrl('/signup')
   })
 
   it('Should present UnexpectedError if invalid data are provided', () => {
     cy.intercept('POST', /signup/, { statusCode: 200, body: { [faker.database.column()]: faker.random.word() } })
-    makeValidSubmit().submit()
+    populateFieldsWithValidValues().submitWithClick()
     formHelpers.testErrorMessage('Ocorreu um erro inesperado. Tente novamente mais tarde')
     formHelpers.testUrl('/signup')
   })
 
   it('Should save accessToken if valid credentials are provided', () => {
     cy.intercept('POST', /signup/, { statusCode: 200, body: { accessToken: faker.datatype.uuid() } })
-    makeValidSubmit().submit()
+    populateFieldsWithValidValues().submitWithEnter()
     cy.getByTestId('spinner').should('not.exist')
     cy.getByTestId('errorMessage').should('not.exist')
     formHelpers.testLocalStorageItem('accessToken')
