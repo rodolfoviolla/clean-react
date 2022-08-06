@@ -1,6 +1,7 @@
 import { faker } from '@faker-js/faker'
 
 import * as formHelpers from '../support/formHelpers'
+import { getAnyOtherErrorStatusCodeThan } from '../support/mockHttp'
 
 const makeValidSubmit = () => {
   cy.getByTestId('email').type(faker.internet.email())
@@ -53,8 +54,7 @@ describe('Login', () => {
   })
 
   it('Should present UnexpectedError on any other errors', () => {
-    const statusCode = faker.internet.httpStatusCode({ types: ['serverError', 'clientError'] })
-    cy.intercept('POST', /login/, { statusCode: statusCode === 401 ? statusCode + 1 : statusCode })
+    cy.intercept('POST', /login/, { statusCode: getAnyOtherErrorStatusCodeThan([401]) })
 
     makeValidSubmit()
 
