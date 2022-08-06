@@ -84,4 +84,11 @@ describe('SignUp', () => {
     formHelpers.testLocalStorageItem('accessToken')
     formHelpers.testUrl('/')
   })
+
+  it('Should prevent multiple submits', () => {
+    cy.intercept('POST', /signup/, { statusCode: 200, body: { accessToken: faker.datatype.uuid() } }).as('request')
+    populateFieldsWithValidValues()
+    cy.getByTestId('submit').dblclick()
+    cy.get('@request.all').should('have.length', 1)
+  })
 })
