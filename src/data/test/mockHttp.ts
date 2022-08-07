@@ -7,14 +7,14 @@ export const makePostRequest = (): HttpPostParams<any> => ({
   body: JSON.parse(faker.datatype.json())
 })
 
-export class HttpPostClientSpy<T, R> implements HttpPostClient<T, R> {
+export class HttpPostClientSpy<RequestType, ResponseType> implements HttpPostClient<RequestType, ResponseType> {
   url?: string
-  body?: T
-  response: HttpResponse<R> = {
+  body?: RequestType
+  response: HttpResponse<ResponseType> = {
     statusCode: HttpStatusCode.ok
   }
 
-  async post ({ url, body }: HttpPostParams<T>): Promise<HttpResponse<R>> {
+  async post ({ url, body }: HttpPostParams<RequestType>): Promise<HttpResponse<ResponseType>> {
     this.url = url
     this.body = body
     return await Promise.resolve(this.response)
