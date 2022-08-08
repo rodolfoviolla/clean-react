@@ -21,10 +21,15 @@ export class HttpPostClientSpy<RequestType, ResponseType> implements HttpPostCli
   }
 }
 
-export class HttpGetClientSpy implements HttpGetClient {
+export class HttpGetClientSpy<ResponseType> implements HttpGetClient<ResponseType> {
   url: string
+  response: HttpResponse<ResponseType> = {
+    statusCode: HttpStatusCode.ok
+  }
 
   async get (params: HttpGetParams) {
     this.url = params.url
+
+    return this.response
   }
 }
