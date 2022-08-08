@@ -4,6 +4,7 @@ import { HttpStatusCode } from '@/data/protocols/http'
 import { HttpGetClientSpy } from '@/data/test'
 import { UnexpectedError } from '@/domain/errors'
 import { SurveyModel } from '@/domain/models'
+import { mockSurveyModelList } from '@/domain/test'
 
 import { RemoteLoadSurveyList } from './remoteLoadSurveyList'
 
@@ -20,6 +21,17 @@ describe('RemoteLoadSurveyList', () => {
     const { sut, url, httpGetClientSpy } = makeSut()
     await sut.loadAll()
     expect(httpGetClientSpy.url).toBe(url)
+  })
+
+  test('Should return a SurveyModel list if HttpGetClient returns 200', async () => {
+    const { sut, httpGetClientSpy } = makeSut()
+    const httpResult = mockSurveyModelList()
+    httpGetClientSpy.response = {
+      statusCode: HttpStatusCode.ok,
+      body: httpResult
+    }
+    const surveyList = await sut.loadAll()
+    expect(surveyList).toEqual(httpResult)
   })
 
   test('Should throw UnexpectedError if HttpGetClient returns 403', async () => {
