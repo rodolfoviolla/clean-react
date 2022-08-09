@@ -19,34 +19,15 @@ export const SurveyList = () => {
                 <span className={Styles.month}>11</span>
                 <span className={Styles.year}>2022</span>
               </time>
-              <p>Qual é seu framework web favorito? Qual é seu framework web favorito? Qual é seu framework web favorito? </p>
+              <p>
+                Qual é seu framework web favorito?
+              </p>
             </div>
             <footer>Ver resultado</footer>
           </li>
-          <li>
-            <div className={Styles.surveyContent}>
-              <Icon className={Styles.icon} iconName='thumbUp' />
-              <time>
-                <span className={Styles.day}>22</span>
-                <span className={Styles.month}>11</span>
-                <span className={Styles.year}>2022</span>
-              </time>
-              <p>Qual é seu framework web favorito?</p>
-            </div>
-            <footer>Ver resultado</footer>
-          </li>
-          <li>
-            <div className={Styles.surveyContent}>
-              <Icon className={Styles.icon} iconName='thumbDown' />
-              <time>
-                <span className={Styles.day}>22</span>
-                <span className={Styles.month}>11</span>
-                <span className={Styles.year}>2022</span>
-              </time>
-              <p>Qual é seu framework web favorito?</p>
-            </div>
-            <footer>Ver resultado</footer>
-          </li>
+          <li></li>
+          <li></li>
+          <li></li>
         </ul>
       </div>
       <Footer />
