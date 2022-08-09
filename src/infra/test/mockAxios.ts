@@ -1,25 +1,24 @@
 import axios from 'axios'
 import { faker } from '@faker-js/faker'
 
-type MockAxios = jest.Mocked<typeof axios>
-
-export type MockAxiosType = {
-  mockedAxios: MockAxios
-  resolveMockedAxios: () => any
-  rejectMockedAxios: () => any
-}
-
-export const mockAxiosResponse = {
+export const mockAxiosPostResponse = {
   status: faker.internet.httpStatusCode(),
   data: JSON.parse(faker.datatype.json())
 }
 
-export const mockAxios = (): MockAxiosType => {
-  const mockedAxios = axios as MockAxios
+export const mockAxiosGetResponse = {
+  status: faker.internet.httpStatusCode(),
+  data: JSON.parse(faker.datatype.json())
+}
 
-  const resolveMockedAxios = () => mockedAxios.post.mockResolvedValueOnce(mockAxiosResponse)
+export const mockAxios = () => {
+  const mockedAxios = axios as jest.Mocked<typeof axios>
 
-  const rejectMockedAxios = () => mockedAxios.post.mockRejectedValueOnce({ response: mockAxiosResponse })
+  const resolveMockedAxiosPost = () => mockedAxios.post.mockResolvedValueOnce(mockAxiosPostResponse)
+  const rejectMockedAxiosPost = () => mockedAxios.post.mockRejectedValueOnce({ response: mockAxiosPostResponse })
 
-  return { mockedAxios, resolveMockedAxios, rejectMockedAxios }
+  const resolveMockedAxiosGet = () => mockedAxios.get.mockResolvedValueOnce(mockAxiosGetResponse)
+  const rejectMockedAxiosGet = () => mockedAxios.get.mockRejectedValueOnce({ response: mockAxiosGetResponse })
+
+  return { mockedAxios, resolveMockedAxiosPost, rejectMockedAxiosPost, resolveMockedAxiosGet, rejectMockedAxiosGet }
 }
