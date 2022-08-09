@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 
-import { AddAccount, SaveAccessToken } from '@/domain/useCases'
+import { AddAccount, SaveCurrentAccount } from '@/domain/useCases'
 import { Footer, FormStatus, Input, LoginHeader, SubmitButton } from '@/presentation/components'
 import { FormContext } from '@/presentation/contexts'
 import { Validation } from '@/presentation/protocols'
@@ -11,10 +11,10 @@ import Styles from './styles.scss'
 type Props = {
   validation: Validation
   addAccount: AddAccount
-  saveAccessToken: SaveAccessToken
+  saveCurrentAccount: SaveCurrentAccount
 }
 
-export const SignUp = ({ validation, addAccount, saveAccessToken }: Props) => {
+export const SignUp = ({ validation, addAccount, saveCurrentAccount }: Props) => {
   const navigate = useNavigate()
   const [state, setState] = useState({
     isLoading: false,
@@ -85,14 +85,14 @@ export const SignUp = ({ validation, addAccount, saveAccessToken }: Props) => {
 
       setState({ ...state, isLoading: true })
 
-      const { accessToken } = await addAccount.add({
+      const account = await addAccount.add({
         name: state.name.value,
         email: state.email.value,
         password: state.password.value,
         passwordConfirmation: state.passwordConfirmation.value
       })
 
-      await saveAccessToken.save(accessToken)
+      await saveCurrentAccount.save(account)
 
       navigate('/', { replace: true })
     } catch (error) {

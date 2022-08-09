@@ -58,19 +58,25 @@ describe('Login', () => {
   })
 
   it('Should present UnexpectedError if invalid data is returned', () => {
-    cy.intercept('POST', /login/, { statusCode: 200, body: { [faker.database.column()]: faker.datatype.uuid() } })
+    cy.intercept('POST', /login/, { statusCode: 200 })
     populateFieldsWithValidValues().submitWithEnter()
     formHelpers.testErrorMessage('Ocorreu um erro inesperado. Tente novamente mais tarde')
     formHelpers.testUrl('/login')
   })
 
   it('Should save accessToken if valid credentials are provided', () => {
-    cy.intercept('POST', /login/, { statusCode: 200, body: { accessToken: faker.datatype.uuid() } })
+    cy.intercept('POST', /login/, {
+      statusCode: 200,
+      body: {
+        accessToken: faker.datatype.uuid(),
+        name: faker.name.findName()
+      }
+    })
     populateFieldsWithValidValues().submitWithClick()
     cy.getByTestId('spinner').should('not.exist')
     cy.getByTestId('errorMessage').should('not.exist')
     formHelpers.testUrl('/')
-    formHelpers.testLocalStorageItem('accessToken')
+    formHelpers.testLocalStorageItem('account')
   })
 
   it('Should prevent multiple submits', () => {

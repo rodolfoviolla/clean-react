@@ -70,18 +70,24 @@ describe('SignUp', () => {
   })
 
   it('Should present UnexpectedError if invalid data are provided', () => {
-    cy.intercept('POST', /signup/, { statusCode: 200, body: { [faker.database.column()]: faker.random.word() } })
+    cy.intercept('POST', /signup/, { statusCode: 200 })
     populateFieldsWithValidValues().submitWithClick()
     formHelpers.testErrorMessage('Ocorreu um erro inesperado. Tente novamente mais tarde')
     formHelpers.testUrl('/signup')
   })
 
   it('Should save accessToken if valid credentials are provided', () => {
-    cy.intercept('POST', /signup/, { statusCode: 200, body: { accessToken: faker.datatype.uuid() } })
+    cy.intercept('POST', /signup/, {
+      statusCode: 200,
+      body: {
+        name: faker.name.findName(),
+        accessToken: faker.datatype.uuid()
+      }
+    })
     populateFieldsWithValidValues().submitWithEnter()
     cy.getByTestId('spinner').should('not.exist')
     cy.getByTestId('errorMessage').should('not.exist')
-    formHelpers.testLocalStorageItem('accessToken')
+    formHelpers.testLocalStorageItem('account')
     formHelpers.testUrl('/')
   })
 
