@@ -4,6 +4,10 @@ import { HttpGetClient, HttpGetParams, HttpPostClient, HttpPostParams } from '@/
 
 export class AxiosHttpClient<RequestType = any, ResponseType = any>
 implements HttpPostClient<RequestType, ResponseType>, HttpGetClient<ResponseType> {
+  private readonly adapt = (axiosResponse: AxiosResponse<ResponseType>) => ({
+    statusCode: axiosResponse.status, body: axiosResponse.data
+  })
+
   async post (params: HttpPostParams<RequestType>) {
     let axiosResponse: AxiosResponse<ResponseType>
 
@@ -13,10 +17,7 @@ implements HttpPostClient<RequestType, ResponseType>, HttpGetClient<ResponseType
       axiosResponse = error.response
     }
 
-    return {
-      statusCode: axiosResponse.status,
-      body: axiosResponse.data
-    }
+    return this.adapt(axiosResponse)
   }
 
   async get (params: HttpGetParams) {
@@ -28,9 +29,6 @@ implements HttpPostClient<RequestType, ResponseType>, HttpGetClient<ResponseType
       axiosResponse = error.response
     }
 
-    return {
-      statusCode: axiosResponse.status,
-      body: axiosResponse.data
-    }
+    return this.adapt(axiosResponse)
   }
 }
