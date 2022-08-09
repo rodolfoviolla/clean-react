@@ -8,16 +8,16 @@ export enum IconName {
 }
 
 type Props = {
-  iconName: IconName
+  iconName: keyof typeof IconName
   className?: string
 }
 
 export const Icon = ({ iconName, className }: Props) => {
-  const iconColor = iconName === IconName.thumbDown ? Styles.red : Styles.green
+  const iconColor = iconName === 'thumbDown' ? Styles.red : Styles.green
 
   return (
     <div className={[Styles.iconWrap, iconColor, className].join(' ')}>
-      <img src={iconName} />
+      <img src={IconName[iconName]} />
     </div>
   )
 }

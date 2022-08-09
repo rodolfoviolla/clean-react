@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { Footer, Header, Icon, IconName } from '@/presentation/components'
+import { Footer, Header, Icon } from '@/presentation/components'
 
 import Styles from './styles.scss'
 
@@ -13,7 +13,7 @@ export const SurveyList = () => {
         <ul>
           <li>
             <div className={Styles.surveyContent}>
-              <Icon className={Styles.icon} iconName={IconName.thumbUp} />
+              <Icon className={Styles.icon} iconName='thumbDown' />
               <time>
                 <span className={Styles.day}>22</span>
                 <span className={Styles.month}>11</span>
@@ -25,7 +25,7 @@ export const SurveyList = () => {
           </li>
           <li>
             <div className={Styles.surveyContent}>
-              <Icon className={Styles.icon} iconName={IconName.thumbUp} />
+              <Icon className={Styles.icon} iconName='thumbUp' />
               <time>
                 <span className={Styles.day}>22</span>
                 <span className={Styles.month}>11</span>
@@ -37,7 +37,7 @@ export const SurveyList = () => {
           </li>
           <li>
             <div className={Styles.surveyContent}>
-              <Icon className={Styles.icon} iconName={IconName.thumbUp} />
+              <Icon className={Styles.icon} iconName='thumbDown' />
               <time>
                 <span className={Styles.day}>22</span>
                 <span className={Styles.month}>11</span>
