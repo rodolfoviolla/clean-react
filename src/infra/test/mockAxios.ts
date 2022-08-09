@@ -14,11 +14,11 @@ export const mockAxiosGetResponse = {
 export const mockAxios = () => {
   const mockedAxios = axios as jest.Mocked<typeof axios>
 
-  const resolveMockedAxiosPost = () => mockedAxios.post.mockResolvedValueOnce(mockAxiosPostResponse)
-  const rejectMockedAxiosPost = () => mockedAxios.post.mockRejectedValueOnce({ response: mockAxiosPostResponse })
+  const resolveMockedAxiosPost = () => mockedAxios.post.mockClear().mockResolvedValueOnce(mockAxiosPostResponse)
+  const rejectMockedAxiosPost = () => mockedAxios.post.mockClear().mockRejectedValueOnce({ response: mockAxiosPostResponse })
 
-  const resolveMockedAxiosGet = () => mockedAxios.get.mockResolvedValueOnce(mockAxiosGetResponse)
-  const rejectMockedAxiosGet = () => mockedAxios.get.mockRejectedValueOnce({ response: mockAxiosGetResponse })
+  const resolveMockedAxiosGet = () => mockedAxios.get.mockClear().mockResolvedValueOnce(mockAxiosGetResponse)
+  const rejectMockedAxiosGet = () => mockedAxios.get.mockClear().mockRejectedValueOnce({ response: mockAxiosGetResponse })
 
   return { mockedAxios, resolveMockedAxiosPost, rejectMockedAxiosPost, resolveMockedAxiosGet, rejectMockedAxiosGet }
 }
