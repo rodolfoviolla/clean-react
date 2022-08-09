@@ -1,5 +1,6 @@
 export * from './Footer/component'
 export * from './FormStatus/component'
+export * from './Header/component'
 export * from './Input/component'
 export * from './LoginHeader/component'
 export * from './Logo/component'
