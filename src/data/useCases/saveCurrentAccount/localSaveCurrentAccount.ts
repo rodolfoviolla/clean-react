@@ -6,9 +6,9 @@ import { SaveCurrentAccount } from '@/domain/useCases'
 export class LocalSaveCurrentAccount implements SaveCurrentAccount {
   constructor (private readonly setStorage: SetStorage) {}
 
-  async save (account: AccountModel): Promise<void> {
+  async save (account: AccountModel) {
     if (!account) throw new UnexpectedError()
 
-    await this.setStorage.set('account', JSON.stringify(account))
+    this.setStorage.set('account', JSON.stringify(account))
   }
 }
