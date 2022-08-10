@@ -4,7 +4,7 @@ import { SaveCurrentAccount } from '@/domain/useCases'
 export class SaveCurrentAccountMock implements SaveCurrentAccount {
   account: AccountModel
 
-  async save (account: AccountModel): Promise<void> {
+  async save (account: AccountModel) {
     this.account = account
   }
 }
