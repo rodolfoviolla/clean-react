@@ -1,5 +1,5 @@
 import { faker } from '@faker-js/faker'
-import { fireEvent, RenderResult, waitFor } from '@testing-library/react'
+import { fireEvent, waitFor, screen } from '@testing-library/react'
 
 const getMockedValues = () => ({
   name: faker.name.findName(),
@@ -8,45 +8,44 @@ const getMockedValues = () => ({
   passwordConfirmation: faker.internet.password()
 })
 
-export const testElementChildCount = (sut: RenderResult, fieldName: string, count: number) => {
-  const element = sut.getByTestId(fieldName)
+export const testElementChildCount = (fieldName: string, count: number) => {
+  const element = screen.getByTestId(fieldName)
   expect(element.childElementCount).toBe(count)
 }
 
-export const testButtonIsDisabled = (sut: RenderResult, elementTestId: string, isDisabled: boolean) => {
-  const button = sut.getByTestId(elementTestId) as HTMLButtonElement
+export const testButtonIsDisabled = (elementTestId: string, isDisabled: boolean) => {
+  const button: HTMLButtonElement = screen.getByTestId(elementTestId)
   expect(button.disabled).toBe(isDisabled)
 }
 
-export const testInputFieldElements = (sut: RenderResult, fieldName: string, validationError: string = '') => {
-  const fieldWrap = sut.getByTestId(`${fieldName}-wrap`)
-  const fieldElement = sut.getByTestId(fieldName)
-  const fieldLabel = sut.getByTestId(`${fieldName}-label`)
+export const testInputFieldElements = (fieldName: string, validationError: string = '') => {
+  const fieldWrap = screen.getByTestId(`${fieldName}-wrap`)
+  const fieldElement = screen.getByTestId(fieldName)
+  const fieldLabel = screen.getByTestId(`${fieldName}-label`)
 
   expect(fieldWrap.getAttribute('data-status')).toBe(validationError ? 'invalid' : 'valid')
   expect(fieldElement.title).toBe(validationError)
   expect(fieldLabel.title).toBe(validationError)
 }
 
-export const populateFormField = ({ getByTestId }: RenderResult, name: string) => {
-  const input = getByTestId(name)
+export const populateFormField = (name: string) => {
+  const input = screen.getByTestId(name)
   const value = getMockedValues()[name]
   fireEvent.input(input, { target: { value } })
   return value
 }
 
 export const simulateValidSubmitFactory = async <T extends string>(
-  sut: RenderResult,
   fieldList: T[],
   waitForCallback?: () => void
 ) => {
   const populatedFields = fieldList.reduce((acc, field) => {
-    const value = populateFormField(sut, field)
+    const value = populateFormField(field)
 
     return { ...acc, [field]: value }
   }, {})
 
-  const submitButton = sut.getByTestId('submit')
+  const submitButton = screen.getByTestId('submit')
   fireEvent.click(submitButton)
 
   waitForCallback && await waitFor(waitForCallback)
@@ -54,12 +53,12 @@ export const simulateValidSubmitFactory = async <T extends string>(
   return populatedFields as { [key in T]: unknown }
 }
 
-export const testElementExists = (sut: RenderResult, elementTestId: string) => {
-  const element = sut.getByTestId(elementTestId)
+export const testElementExists = (elementTestId: string) => {
+  const element = screen.getByTestId(elementTestId)
   expect(element).toBeTruthy()
 }
 
-export const testElementText = (sut: RenderResult, elementTestId: string, text: string) => {
-  const element = sut.getByTestId(elementTestId)
+export const testElementText = (elementTestId: string, text: string) => {
+  const element = screen.getByTestId(elementTestId)
   expect(element.textContent).toBe(text)
 }
