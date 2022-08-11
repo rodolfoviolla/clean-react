@@ -45,8 +45,8 @@ describe('Login Component', () => {
   test('Should start with initial state', () => {
     const validationError = faker.random.words()
     makeSut({ validationError })
-    formHelpers.testElementChildCount('error-wrap', 0)
-    formHelpers.testButtonIsDisabled('submit', true)
+    expect(screen.getByTestId('error-wrap').children).toHaveLength(0)
+    expect(screen.getByTestId('submit')).toBeDisabled()
     formHelpers.testInputFieldElements('name', validationError)
     formHelpers.testInputFieldElements('email', validationError)
     formHelpers.testInputFieldElements('password', validationError)
@@ -115,13 +115,13 @@ describe('Login Component', () => {
     formHelpers.populateFormField('email')
     formHelpers.populateFormField('password')
     formHelpers.populateFormField('passwordConfirmation')
-    formHelpers.testButtonIsDisabled('submit', false)
+    expect(screen.getByTestId('submit')).toBeEnabled()
   })
 
   test('Should show spinner on submit', async () => {
     makeSut()
     await simulateValidSubmit()
-    formHelpers.testElementExists('spinner')
+    expect(screen.queryByTestId('spinner')).toBeInTheDocument()
   })
 
   test('Should call AddAccount with correct values', async () => {
@@ -149,8 +149,8 @@ describe('Login Component', () => {
     const error = new EmailInUseError()
     jest.spyOn(addAccountSpy, 'add').mockRejectedValueOnce(error)
     await simulateValidSubmit(() => {
-      formHelpers.testElementChildCount('error-wrap', 1)
-      formHelpers.testElementText('error-message', error.message)
+      expect(screen.getByTestId('error-wrap').children).toHaveLength(1)
+      expect(screen.getByTestId('error-message')).toHaveTextContent(error.message)
     })
   })
 

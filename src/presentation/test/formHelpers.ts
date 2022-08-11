@@ -8,24 +8,14 @@ const getMockedValues = () => ({
   passwordConfirmation: faker.internet.password()
 })
 
-export const testElementChildCount = (fieldName: string, count: number) => {
-  const element = screen.getByTestId(fieldName)
-  expect(element.childElementCount).toBe(count)
-}
-
-export const testButtonIsDisabled = (elementTestId: string, isDisabled: boolean) => {
-  const button: HTMLButtonElement = screen.getByTestId(elementTestId)
-  expect(button.disabled).toBe(isDisabled)
-}
-
 export const testInputFieldElements = (fieldName: string, validationError: string = '') => {
   const fieldWrap = screen.getByTestId(`${fieldName}-wrap`)
   const fieldElement = screen.getByTestId(fieldName)
   const fieldLabel = screen.getByTestId(`${fieldName}-label`)
 
-  expect(fieldWrap.getAttribute('data-status')).toBe(validationError ? 'invalid' : 'valid')
-  expect(fieldElement.title).toBe(validationError)
-  expect(fieldLabel.title).toBe(validationError)
+  expect(fieldWrap).toHaveAttribute('data-status', validationError ? 'invalid' : 'valid')
+  expect(fieldElement).toHaveProperty('title', validationError)
+  expect(fieldLabel).toHaveProperty('title', validationError)
 }
 
 export const populateFormField = (name: string) => {
@@ -51,14 +41,4 @@ export const simulateValidSubmitFactory = async <T extends string>(
   waitForCallback && await waitFor(waitForCallback)
 
   return populatedFields as { [key in T]: unknown }
-}
-
-export const testElementExists = (elementTestId: string) => {
-  const element = screen.getByTestId(elementTestId)
-  expect(element).toBeTruthy()
-}
-
-export const testElementText = (elementTestId: string, text: string) => {
-  const element = screen.getByTestId(elementTestId)
-  expect(element.textContent).toBe(text)
 }
