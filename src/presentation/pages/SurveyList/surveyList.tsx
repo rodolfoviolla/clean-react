@@ -2,7 +2,7 @@ import React from 'react'
 
 import { Footer, Header, Icon } from '@/presentation/components'
 
-import Styles from './styles.scss'
+import Styles from './surveyList.styles.scss'
 
 export const SurveyList = () => {
   return (

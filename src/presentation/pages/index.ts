@@ -1,3 +1,3 @@
-export * from './Login/component'
-export * from './SignUp/component'
-export * from './SurveyList/component'
+export * from './Login/login'
+export * from './SignUp/signup'
+export * from './SurveyList/surveyList'

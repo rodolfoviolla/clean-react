@@ -4,10 +4,11 @@ import { createMemoryHistory } from 'history'
 import { faker } from '@faker-js/faker'
 import { cleanup, fireEvent, render, RenderResult } from '@testing-library/react'
 
-import { SignUp } from '@/presentation/pages'
 import { AddAccountSpy, formHelpers, ValidationStub } from '@/presentation/test'
 import { EmailInUseError } from '@/domain/errors'
 import { ApiContext } from '@/presentation/contexts'
+
+import { SignUp } from './signup'
 
 type SutParams = {
   validationError: string

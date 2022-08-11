@@ -2,7 +2,7 @@ import React, { useContext, useRef } from 'react'
 
 import { FormContext } from '@/presentation/contexts'
 
-import Styles from './styles.scss'
+import Styles from './input.styles.scss'
 
 type InputProps = React.DetailedHTMLProps<React.InputHTMLAttributes<HTMLInputElement>, HTMLInputElement>
 

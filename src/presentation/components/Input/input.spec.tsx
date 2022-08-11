@@ -2,8 +2,9 @@ import React from 'react'
 import { faker } from '@faker-js/faker'
 import { fireEvent, render } from '@testing-library/react'
 
-import { Input } from './component'
 import { FormContext } from '@/presentation/contexts'
+
+import { Input } from './input'
 
 const makeSut = () => {
   const fieldName = faker.database.column()

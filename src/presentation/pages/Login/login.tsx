@@ -1,29 +1,25 @@
 import React, { useContext, useEffect, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 
-import { AddAccount } from '@/domain/useCases'
+import { Authentication } from '@/domain/useCases'
 import { Footer, FormStatus, Input, LoginHeader, SubmitButton } from '@/presentation/components'
 import { ApiContext, FormContext } from '@/presentation/contexts'
 import { Validation } from '@/presentation/protocols'
 
-import Styles from './styles.scss'
+import Styles from './login.styles.scss'
 
-type Props = {
+type LoginProps = {
   validation: Validation
-  addAccount: AddAccount
+  authentication: Authentication
 }
 
-export const SignUp = ({ validation, addAccount }: Props) => {
+export const Login = ({ validation, authentication }: LoginProps) => {
   const { setCurrentAccount } = useContext(ApiContext)
   const navigate = useNavigate()
   const [state, setState] = useState({
     isLoading: false,
     isFormInvalid: true,
     errorMessage: '',
-    name: {
-      value: '',
-      errorMessage: ''
-    },
     email: {
       value: '',
       errorMessage: ''
@@ -31,32 +27,20 @@ export const SignUp = ({ validation, addAccount }: Props) => {
     password: {
       value: '',
       errorMessage: ''
-    },
-    passwordConfirmation: {
-      value: '',
-      errorMessage: ''
     }
   })
 
   useEffect(() => {
     const formData = {
-      name: state.name.value,
       email: state.email.value,
-      password: state.password.value,
-      passwordConfirmation: state.passwordConfirmation.value
+      password: state.password.value
     }
 
-    const nameErrorMessage = validation.validate('name', formData)
     const emailErrorMessage = validation.validate('email', formData)
     const passwordErrorMessage = validation.validate('password', formData)
-    const passwordConfirmationErrorMessage = validation.validate('passwordConfirmation', formData)
 
     setState({
       ...state,
-      name: {
-        ...state.name,
-        errorMessage: nameErrorMessage
-      },
       email: {
         ...state.email,
         errorMessage: emailErrorMessage
@@ -65,17 +49,9 @@ export const SignUp = ({ validation, addAccount }: Props) => {
         ...state.password,
         errorMessage: passwordErrorMessage
       },
-      passwordConfirmation: {
-        ...state.passwordConfirmation,
-        errorMessage: passwordConfirmationErrorMessage
-      },
-      isFormInvalid:
-        !!nameErrorMessage ||
-        !!emailErrorMessage ||
-        !!passwordErrorMessage ||
-        !!passwordConfirmationErrorMessage
+      isFormInvalid: !!emailErrorMessage || !!passwordErrorMessage
     })
-  }, [state.name.value, state.email.value, state.password.value, state.passwordConfirmation.value])
+  }, [state.email.value, state.password.value])
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault()
@@ -85,40 +61,29 @@ export const SignUp = ({ validation, addAccount }: Props) => {
 
       setState({ ...state, isLoading: true })
 
-      const account = await addAccount.add({
-        name: state.name.value,
-        email: state.email.value,
-        password: state.password.value,
-        passwordConfirmation: state.passwordConfirmation.value
-      })
+      const account = await authentication.auth({ email: state.email.value, password: state.password.value })
 
       setCurrentAccount(account)
 
       navigate('/', { replace: true })
     } catch (error) {
-      setState({
-        ...state,
-        isLoading: false,
-        errorMessage: error.message
-      })
+      setState({ ...state, isLoading: false, errorMessage: error.message })
     }
   }
 
   return (
-    <div className={Styles.signupWrap}>
+    <div className={Styles.loginWrap}>
       <LoginHeader />
 
       <FormContext.Provider value={[state, setState]}>
         <form data-testid="form" className={Styles.form} onSubmit={handleSubmit}>
-          <h2>Criar conta</h2>
-          <Input type="text" name="name" placeholder="Digite seu nome" />
+          <h2>Login</h2>
           <Input type="email" name="email" placeholder="Digite seu e-mail" />
           <Input type="password" name="password" placeholder="Digite sua senha" />
-          <Input type="password" name="passwordConfirmation" placeholder="Confirme sua senha" />
 
-          <SubmitButton text='Cadastrar' />
+          <SubmitButton text='Entrar' />
 
-          <Link data-testid="login" className={Styles.link} replace to="/login">Voltar para o login</Link>
+          <Link data-testid="signup" className={Styles.link} to="/signup">Criar conta</Link>
 
           <FormStatus />
         </form>

@@ -6,8 +6,9 @@ import { cleanup, fireEvent, render, RenderResult } from '@testing-library/react
 
 import { InvalidCredentialsError } from '@/domain/errors'
 import { ApiContext } from '@/presentation/contexts'
-import { Login } from '@/presentation/pages'
 import { AuthenticationSpy, ValidationStub, formHelpers } from '@/presentation/test'
+
+import { Login } from './login'
 
 type SutParams = {
   validationError: string

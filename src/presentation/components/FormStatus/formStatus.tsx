@@ -1,9 +1,9 @@
 import React, { useContext } from 'react'
 
 import { Spinner } from '@/presentation/components'
-
-import Styles from './styles.scss'
 import { FormContext } from '@/presentation/contexts'
+
+import Styles from './formStatus.styles.scss'
 
 export const FormStatus = () => {
   const [{ isLoading, errorMessage }] = useContext(FormContext)

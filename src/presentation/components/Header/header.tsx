@@ -2,7 +2,7 @@ import React, { memo } from 'react'
 
 import { Logo } from '@/presentation/components'
 
-import Styles from './styles.scss'
+import Styles from './header.styles.scss'
 
 const HeaderComponent = () => {
   return (
