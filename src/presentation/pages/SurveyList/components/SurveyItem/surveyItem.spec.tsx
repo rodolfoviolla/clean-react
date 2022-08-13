@@ -20,4 +20,14 @@ describe('SurveyItem', () => {
     expect(screen.getByTestId('month')).toHaveTextContent(/^jan$/)
     expect(screen.getByTestId('year')).toHaveTextContent(/2022/)
   })
+
+  test('Should render with correct values', () => {
+    const survey = mockSurveyModel(new Date('2020-06-02T00:00:00'), false)
+    makeSut(survey)
+    expect(screen.getByTestId('icon')).toHaveProperty('src', IconName.thumbDown)
+    expect(screen.getByTestId('question')).toHaveTextContent(survey.question)
+    expect(screen.getByTestId('day')).toHaveTextContent(/^02$/)
+    expect(screen.getByTestId('month')).toHaveTextContent(/^jun$/)
+    expect(screen.getByTestId('year')).toHaveTextContent(/2020/)
+  })
 })
