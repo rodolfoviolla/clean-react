@@ -4,7 +4,9 @@ import { SurveyModel } from '@/domain/models'
 import { LoadSurveyList } from '@/domain/useCases'
 import { Footer, Header } from '@/presentation/components'
 
-import { SurveyItem, SurveyItemEmpty } from './components'
+import { SurveyList, Error } from './components'
+import { SurveyContext } from './context'
+
 import Styles from './surveys.styles.scss'
 
 type SurveysProps = {
@@ -21,25 +23,13 @@ export const Surveys = ({ loadSurveyList }: SurveysProps) => {
   }, [])
 
   return (
-    <div className={Styles.surveyListWrap}>
+    <div className={Styles.surveysWrap}>
       <Header />
       <div className={Styles.contentWrap}>
         <h2>Enquetes</h2>
-        {state?.error
-          ? (
-              <div>
-                <span data-testid="error-message">{state.error.message}</span>
-                <button>Recarregar</button>
-              </div>
-            )
-          : (
-              <ul data-testid="survey-list">
-                {state.surveyList.length
-                  ? state.surveyList.map((survey) => <SurveyItem key={survey.id} survey={survey} />)
-                  : <SurveyItemEmpty />
-                }
-              </ul>
-            )}
+        <SurveyContext.Provider value={[state, setState]}>
+          {state?.error ? <Error /> : <SurveyList /> }
+        </SurveyContext.Provider>
       </div>
       <Footer />
     </div>
