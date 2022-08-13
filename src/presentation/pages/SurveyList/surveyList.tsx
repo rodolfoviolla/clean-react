@@ -12,10 +12,12 @@ type SurveyListProps = {
 }
 
 export const SurveyList = ({ loadSurveyList }: SurveyListProps) => {
-  const [surveyList, setSurveyList] = useState<SurveyModel[]>([])
+  const [state, setState] = useState<{ surveyList: SurveyModel[], error?: Error }>({ surveyList: [] })
 
   useEffect(() => {
-    loadSurveyList.loadAll().then(setSurveyList)
+    loadSurveyList.loadAll()
+      .then((surveyList) => setState({ surveyList }))
+      .catch((error) => setState({ surveyList: [], error }))
   }, [])
 
   return (
@@ -23,12 +25,21 @@ export const SurveyList = ({ loadSurveyList }: SurveyListProps) => {
       <Header />
       <div className={Styles.contentWrap}>
         <h2>Enquetes</h2>
-        <ul data-testid="survey-list">
-          {surveyList.length
-            ? surveyList.map((survey) => <SurveyItem key={survey.id} survey={survey} />)
-            : <SurveyItemEmpty />
-          }
-        </ul>
+        {state?.error
+          ? (
+              <div>
+                <span data-testid="error-message">{state.error.message}</span>
+                <button>Recarregar</button>
+              </div>
+            )
+          : (
+              <ul data-testid="survey-list">
+                {state.surveyList.length
+                  ? state.surveyList.map((survey) => <SurveyItem key={survey.id} survey={survey} />)
+                  : <SurveyItemEmpty />
+                }
+              </ul>
+            )}
       </div>
       <Footer />
     </div>
