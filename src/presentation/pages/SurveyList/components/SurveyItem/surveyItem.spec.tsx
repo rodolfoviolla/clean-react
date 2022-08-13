@@ -1,16 +1,19 @@
 import React from 'react'
 import { render, screen } from '@testing-library/react'
 
-import { SurveyItem } from './surveyItem'
 import { mockSurveyModel } from '@/domain/test'
 import { IconName } from '@/presentation/components'
 
+import { SurveyItem } from './surveyItem'
+
+const makeSut = (survey = mockSurveyModel()) => {
+  render(<SurveyItem survey={survey} />)
+}
+
 describe('SurveyItem', () => {
   test('Should render with correct values', () => {
-    const survey = mockSurveyModel()
-    survey.didAnswer = true
-    survey.date = new Date('2022-01-10T00:00:00')
-    render(<SurveyItem survey={survey} />)
+    const survey = mockSurveyModel(new Date('2022-01-10T00:00:00'), true)
+    makeSut(survey)
     expect(screen.getByTestId('icon')).toHaveProperty('src', IconName.thumbUp)
     expect(screen.getByTestId('question')).toHaveTextContent(survey.question)
     expect(screen.getByTestId('day')).toHaveTextContent(/^10$/)
