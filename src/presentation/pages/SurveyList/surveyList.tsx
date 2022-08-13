@@ -15,7 +15,7 @@ export const SurveyList = ({ loadSurveyList }: SurveyListProps) => {
   const [surveyList, setSurveyList] = useState<SurveyModel[]>([])
 
   useEffect(() => {
-    loadSurveyList.loadAll().then(response => setSurveyList(response))
+    loadSurveyList.loadAll().then(setSurveyList)
   }, [])
 
   return (
