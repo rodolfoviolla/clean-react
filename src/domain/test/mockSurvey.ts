@@ -13,4 +13,4 @@ export const mockSurveyModel = (date = faker.date.recent(), didAnswer = faker.da
   didAnswer
 })
 
-export const mockSurveyModelList = (): SurveyModel[] => Array.from({ length: 3 }, () => mockSurveyModel())
+export const mockSurveyModelList = (length = 1): SurveyModel[] => Array.from({ length }, () => mockSurveyModel())
