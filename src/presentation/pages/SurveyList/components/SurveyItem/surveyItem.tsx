@@ -11,6 +11,9 @@ type SurveyItemProps = {
 
 export const SurveyItem = ({ survey }: SurveyItemProps) => {
   const iconName = survey.didAnswer ? 'thumbUp' : 'thumbDown'
+  const day = survey.date.getDate().toString().padStart(2, '0')
+  const month = survey.date.toLocaleString('pt-BR', { month: 'short' }).replace('.', '')
+  const year = survey.date.getFullYear()
 
   return (
     <li className={Styles.surveyItemWrap}>
@@ -18,13 +21,13 @@ export const SurveyItem = ({ survey }: SurveyItemProps) => {
         <Icon className={Styles.icon} iconName={iconName} />
         <time>
           <span data-testid="day" className={Styles.day}>
-            {survey.date.getDate().toString().padStart(2, '0')}
+            {day}
           </span>
           <span data-testid="month" className={Styles.month}>
-            {survey.date.toLocaleString('pt-BR', { month: 'short' }).replace('.', '')}
+            {month}
           </span>
           <span data-testid="year" className={Styles.year}>
-            {survey.date.getFullYear()}
+            {year}
           </span>
         </time>
         <p data-testid="question">
