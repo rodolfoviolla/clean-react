@@ -4,7 +4,7 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import { getCurrentAccountAdapter, setCurrentAccountAdapter } from '@/main/adapters'
 import { makeLogin, makeSignUp } from '@/main/factories/pages'
 import { ApiContext } from '@/presentation/contexts'
-import { SurveyList } from '@/presentation/pages'
+import { Surveys } from '@/presentation/pages'
 import { PrivateRoute } from '@/presentation/components'
 
 export const Router = () => {
@@ -16,7 +16,7 @@ export const Router = () => {
         <Routes>
           <Route path='/login' element={makeLogin()} />
           <Route path='/signup' element={makeSignUp()} />
-          <Route path='/' element={<PrivateRoute element={<SurveyList />} />}
+          <Route path='/' element={<PrivateRoute element={<Surveys />} />}
           />
         </Routes>
       </BrowserRouter>

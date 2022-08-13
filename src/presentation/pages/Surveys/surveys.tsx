@@ -5,13 +5,13 @@ import { LoadSurveyList } from '@/domain/useCases'
 import { Footer, Header } from '@/presentation/components'
 
 import { SurveyItem, SurveyItemEmpty } from './components'
-import Styles from './surveyList.styles.scss'
+import Styles from './surveys.styles.scss'
 
-type SurveyListProps = {
-  loadSurveyList: LoadSurveyList
+type SurveysProps = {
+  loadSurveyList?: LoadSurveyList
 }
 
-export const SurveyList = ({ loadSurveyList }: SurveyListProps) => {
+export const Surveys = ({ loadSurveyList }: SurveysProps) => {
   const [state, setState] = useState<{ surveyList: SurveyModel[], error?: Error }>({ surveyList: [] })
 
   useEffect(() => {

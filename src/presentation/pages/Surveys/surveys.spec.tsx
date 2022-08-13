@@ -6,7 +6,7 @@ import { SurveyModel } from '@/domain/models'
 import { mockSurveyModelList } from '@/domain/test'
 import { LoadSurveyList } from '@/domain/useCases'
 
-import { SurveyList } from './surveyList'
+import { Surveys } from './surveys'
 
 export class LoadSurveyListSpy implements LoadSurveyList {
   callsCount = 0
@@ -23,12 +23,12 @@ export class LoadSurveyListSpy implements LoadSurveyList {
 }
 
 const makeSut = (surveyListLength = 3, loadSurveyListSpy = new LoadSurveyListSpy(surveyListLength)) => {
-  render(<SurveyList loadSurveyList={loadSurveyListSpy} />)
+  render(<Surveys loadSurveyList={loadSurveyListSpy} />)
 
   return { loadSurveyListSpy, surveyListLength }
 }
 
-describe('SurveyList component', () => {
+describe('Surveys component', () => {
   test('Should present 4 empty items on start', async () => {
     makeSut()
     const surveyList = screen.getByTestId('survey-list')
