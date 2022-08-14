@@ -9,4 +9,5 @@ export const makeLogin = () => (
   <Login
     authentication={makeRemoteAuthentication()}
     validation={makeLoginValidation()}
-  />)
+  />
+)

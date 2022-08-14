@@ -9,7 +9,7 @@ import { SurveyContext, SurveyContextStateType } from './context'
 import Styles from './surveys.styles.scss'
 
 type SurveysProps = {
-  loadSurveyList?: LoadSurveyList
+  loadSurveyList: LoadSurveyList
 }
 
 export const Surveys = ({ loadSurveyList }: SurveysProps) => {
