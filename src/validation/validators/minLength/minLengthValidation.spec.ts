@@ -21,9 +21,13 @@ describe('MinLengthValidation', () => {
 
   test('Should return falsy if value is valid', () => {
     const { sut, minLength, fieldName } = makeSut()
-    let error = sut.validate({ [fieldName]: faker.random.alphaNumeric(minLength) })
+    const error = sut.validate({ [fieldName]: faker.random.alphaNumeric(minLength) })
     expect(error).toBeFalsy()
-    error = sut.validate({ [fieldName]: faker.random.alphaNumeric(minLength + 1) })
+  })
+
+  test('Should return falsy if value is valid', () => {
+    const { sut, minLength, fieldName } = makeSut()
+    const error = sut.validate({ [fieldName]: faker.random.alphaNumeric(minLength + 1) })
     expect(error).toBeFalsy()
   })
 

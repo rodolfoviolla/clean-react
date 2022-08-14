@@ -71,7 +71,7 @@ describe('Surveys component', () => {
     const loadSurveyListSpy = new LoadSurveyListSpy(surveyListLength)
     jest.spyOn(loadSurveyListSpy, 'loadAll').mockRejectedValueOnce(new UnexpectedError())
     makeSut(surveyListLength, loadSurveyListSpy)
-    await waitFor(async () => {
+    await waitFor(() => {
       fireEvent.click(screen.getByTestId('retry'))
     })
     expect(loadSurveyListSpy.callsCount).toBe(1)

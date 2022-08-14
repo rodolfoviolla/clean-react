@@ -12,7 +12,7 @@ export const SurveyList = () => {
 
   return (
     <ul data-testid="survey-list" className={Styles.surveyListWrap}>
-      {state?.surveyList.length
+      {state.surveyList.length
         ? state.surveyList.map((survey: SurveyModel) => <SurveyItem key={survey.id} survey={survey} />)
         : <SurveyItemEmpty />
       }

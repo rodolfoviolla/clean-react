@@ -13,13 +13,13 @@ type SurveysProps = {
 }
 
 export const Surveys = ({ loadSurveyList }: SurveysProps) => {
-  const [state, setState] = useState<SurveyContextStateType>()
+  const [state, setState] = useState<SurveyContextStateType>({ surveyList: [], reload: false, error: null })
 
   useEffect(() => {
     loadSurveyList.loadAll()
-      .then((surveyList) => setState({ surveyList }))
-      .catch((error) => setState({ error }))
-  }, [state?.reload])
+      .then((surveyList) => setState({ ...state, surveyList }))
+      .catch((error) => setState({ ...state, error }))
+  }, [state.reload])
 
   return (
     <div className={Styles.surveysWrap}>
@@ -27,7 +27,7 @@ export const Surveys = ({ loadSurveyList }: SurveysProps) => {
       <div className={Styles.contentWrap}>
         <h2>Enquetes</h2>
         <SurveyContext.Provider value={[state, setState]}>
-          {state?.error ? <Error /> : <SurveyList /> }
+          {state.error ? <Error /> : <SurveyList /> }
         </SurveyContext.Provider>
       </div>
       <Footer />
