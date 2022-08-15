@@ -24,7 +24,7 @@ implements HttpPostClient<RequestType, ResponseType>, HttpGetClient<ResponseType
     let axiosResponse: AxiosResponse<ResponseType>
 
     try {
-      axiosResponse = await axios.get(params.url)
+      axiosResponse = await axios.get(params.url, { headers: params.headers })
     } catch (error) {
       axiosResponse = error.response
     }
