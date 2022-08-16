@@ -2,24 +2,9 @@ import React from 'react'
 import { fireEvent, render, screen, waitFor } from '@testing-library/react'
 
 import { UnexpectedError } from '@/domain/errors'
-import { mockSurveyModelList } from '@/domain/test'
-import { LoadSurveyList } from '@/domain/useCases'
+import { LoadSurveyListSpy } from '@/domain/test'
 
 import { Surveys } from './surveys'
-
-export class LoadSurveyListSpy implements LoadSurveyList {
-  callsCount = 0
-  surveyList: LoadSurveyList.Model[]
-
-  constructor (private readonly length: number) {
-    this.surveyList = mockSurveyModelList(this.length)
-  }
-
-  async loadAll () {
-    this.callsCount++
-    return this.surveyList
-  }
-}
 
 const makeSut = (surveyListLength = 3, loadSurveyListSpy = new LoadSurveyListSpy(surveyListLength)) => {
   render(<Surveys loadSurveyList={loadSurveyListSpy} />)
