@@ -1,5 +1,5 @@
 import { AxiosHttpClient } from '@/infra/http'
 
-export const makeAxiosHttpClient = <T, R>() => {
-  return new AxiosHttpClient<T, R>()
+export const makeAxiosHttpClient = <RequestType, ResponseType>() => {
+  return new AxiosHttpClient<RequestType, ResponseType>()
 }
