@@ -8,7 +8,8 @@ export class AuthorizeHttpGetClientDecorator<ResponseType> implements HttpGetCli
   ) {}
 
   async get (params: HttpGetParams) {
-    this.getStorage.get('account')
+    const account = this.getStorage.get('account')
+    if (account?.accessToken) Object.assign(params, { headers: { 'x-access-token': account.accessToken } })
     await this.httpGetClientSpy.get(params)
     return null
   }
