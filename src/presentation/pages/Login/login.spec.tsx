@@ -5,8 +5,9 @@ import { faker } from '@faker-js/faker'
 import { fireEvent, render, screen } from '@testing-library/react'
 
 import { InvalidCredentialsError } from '@/domain/errors'
+import { AuthenticationSpy } from '@/domain/test'
 import { ApiContext } from '@/presentation/contexts'
-import { AuthenticationSpy, ValidationStub, formHelpers } from '@/presentation/test'
+import { ValidationStub, formHelpers } from '@/presentation/test'
 
 import { Login } from './login'
 

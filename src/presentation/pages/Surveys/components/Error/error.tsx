@@ -1,6 +1,6 @@
 import React, { useContext } from 'react'
 
-import { SurveyContext } from '../../context'
+import { SurveyContext } from '@/presentation/pages/Surveys/context'
 
 import Styles from './error.styles.scss'
 

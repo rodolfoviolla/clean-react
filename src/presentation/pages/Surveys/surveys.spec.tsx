@@ -2,7 +2,6 @@ import React from 'react'
 import { fireEvent, render, screen, waitFor } from '@testing-library/react'
 
 import { UnexpectedError } from '@/domain/errors'
-import { SurveyModel } from '@/domain/models'
 import { mockSurveyModelList } from '@/domain/test'
 import { LoadSurveyList } from '@/domain/useCases'
 
@@ -10,7 +9,7 @@ import { Surveys } from './surveys'
 
 export class LoadSurveyListSpy implements LoadSurveyList {
   callsCount = 0
-  surveyList: SurveyModel[]
+  surveyList: LoadSurveyList.Model[]
 
   constructor (private readonly length: number) {
     this.surveyList = mockSurveyModelList(this.length)

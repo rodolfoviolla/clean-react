@@ -1,12 +1,12 @@
 import React from 'react'
 
-import { SurveyModel } from '@/domain/models'
 import { Icon } from '@/presentation/components'
 
 import Styles from './surveyItem.styles.scss'
+import { LoadSurveyList } from '@/domain/useCases'
 
 type SurveyItemProps = {
-  survey: SurveyModel
+  survey: LoadSurveyList.Model
 }
 
 export const SurveyItem = ({ survey }: SurveyItemProps) => {

@@ -4,9 +4,10 @@ import { createMemoryHistory } from 'history'
 import { faker } from '@faker-js/faker'
 import { fireEvent, render, screen } from '@testing-library/react'
 
-import { AddAccountSpy, formHelpers, ValidationStub } from '@/presentation/test'
 import { EmailInUseError } from '@/domain/errors'
+import { AddAccountSpy } from '@/domain/test'
 import { ApiContext } from '@/presentation/contexts'
+import { formHelpers, ValidationStub } from '@/presentation/test'
 
 import { SignUp } from './signup'
 
