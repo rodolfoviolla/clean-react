@@ -2,9 +2,9 @@ import { faker } from '@faker-js/faker'
 
 import { HttpGetParams } from '@/data/protocols/http'
 import { GetStorageSpy, HttpGetClientSpy, mockGetRequest } from '@/data/test'
+import { mockAccountModel } from '@/domain/test'
 
 import { AuthorizeHttpGetClientDecorator } from './authorizeHttpGetClientDecorator'
-import { mockAccountModel } from '@/domain/test'
 
 const makeSut = () => {
   const getStorageSpy = new GetStorageSpy()
@@ -59,5 +59,11 @@ describe('AuthorizeHttpGetClientDecorator', () => {
       ...headers,
       'x-access-token': getStorageSpy.value.accessToken
     })
+  })
+
+  test('Should return the same result as HttpGetClient', async () => {
+    const { sut, httpGetClientSpy } = makeSut()
+    const httpResponse = await sut.get(mockGetRequest())
+    expect(httpResponse).toEqual(httpGetClientSpy.response)
   })
 })
