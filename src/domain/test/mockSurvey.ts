@@ -12,7 +12,7 @@ export const mockSurveyModel = (
   didAnswer
 })
 
-export const mockSurveyModelList = (length = 1): LoadSurveyList.Model[] => {
+export const mockSurveyModelList = (length: number): LoadSurveyList.Model[] => {
   return Array.from({ length }, () => mockSurveyModel())
 }
 
