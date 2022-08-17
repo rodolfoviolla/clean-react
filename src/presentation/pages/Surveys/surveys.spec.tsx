@@ -3,7 +3,7 @@ import { Router } from 'react-router-dom'
 import { fireEvent, render, screen, waitFor } from '@testing-library/react'
 import { createMemoryHistory } from 'history'
 
-import { UnexpectedError } from '@/domain/errors'
+import { AccessDeniedError, UnexpectedError } from '@/domain/errors'
 import { LoadSurveyListSpy, mockAccountModel } from '@/domain/test'
 import { ApiContext } from '@/presentation/contexts'
 
@@ -12,15 +12,16 @@ import { Surveys } from './surveys'
 const history = createMemoryHistory({ initialEntries: ['/'] })
 
 const makeSut = (surveyListLength = 3, loadSurveyListSpy = new LoadSurveyListSpy(surveyListLength)) => {
+  const setCurrentAccountMock = jest.fn()
   render(
-    <ApiContext.Provider value={{ getCurrentAccount: mockAccountModel }}>
+    <ApiContext.Provider value={{ setCurrentAccount: setCurrentAccountMock, getCurrentAccount: mockAccountModel }}>
       <Router location={history.location} navigator={history}>
         <Surveys loadSurveyList={loadSurveyListSpy} />
       </Router>
     </ApiContext.Provider>
   )
 
-  return { loadSurveyListSpy, surveyListLength }
+  return { loadSurveyListSpy, surveyListLength, setCurrentAccountMock }
 }
 
 describe('Surveys component', () => {
@@ -49,7 +50,7 @@ describe('Surveys component', () => {
     })
   })
 
-  test('Should render error on failure', async () => {
+  test('Should render error on UnexpectedError', async () => {
     const surveyListLength = 3
     const loadSurveyListSpy = new LoadSurveyListSpy(surveyListLength)
     const error = new UnexpectedError()
@@ -58,6 +59,17 @@ describe('Surveys component', () => {
     await waitFor(() => {
       expect(screen.queryByTestId('survey-list')).not.toBeInTheDocument()
       expect(screen.getByTestId('error-message')).toHaveTextContent(error.message)
+    })
+  })
+
+  test('Should logout on AccessDeniedError', async () => {
+    const surveyListLength = 3
+    const loadSurveyListSpy = new LoadSurveyListSpy(surveyListLength)
+    jest.spyOn(loadSurveyListSpy, 'loadAll').mockRejectedValueOnce(new AccessDeniedError())
+    const { setCurrentAccountMock } = makeSut(surveyListLength, loadSurveyListSpy)
+    await waitFor(() => {
+      expect(setCurrentAccountMock).toHaveBeenCalledWith()
+      expect(history.location.pathname).toBe('/login')
     })
   })
 
