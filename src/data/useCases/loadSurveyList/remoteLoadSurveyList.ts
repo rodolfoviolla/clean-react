@@ -10,12 +10,11 @@ export class RemoteLoadSurveyList implements LoadSurveyList {
 
   async loadAll () {
     const httpResponse = await this.httpGetClient.get({ url: this.url })
-    const formattedHttpResponse = (httpResponse.body || []).map(remoteSurvey => ({
-      ...remoteSurvey, date: new Date(remoteSurvey.date)
-    }))
 
     switch (httpResponse.statusCode) {
-      case HttpStatusCode.ok: return formattedHttpResponse
+      case HttpStatusCode.ok: return (httpResponse.body || []).map(remoteSurvey => ({
+        ...remoteSurvey, date: new Date(remoteSurvey.date)
+      }))
       case HttpStatusCode.noContent: return []
       case HttpStatusCode.forbidden: throw new AccessDeniedError()
       default: throw new UnexpectedError()
