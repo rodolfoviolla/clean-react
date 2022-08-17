@@ -9,16 +9,22 @@ import { Header } from './header'
 
 const history = createMemoryHistory({ initialEntries: ['/'] })
 
+const makeSut = () => {
+  const setCurrentAccountMock = jest.fn()
+  render(
+    <Router location={history.location} navigator={history}>
+      <ApiContext.Provider value={{ setCurrentAccount: setCurrentAccountMock }}>
+        <Header />
+      </ApiContext.Provider>
+    </Router>
+  )
+
+  return { setCurrentAccountMock }
+}
+
 describe('Header Component', () => {
   test('Should call setCurrentAccount with falsy value', () => {
-    const setCurrentAccountMock = jest.fn()
-    render(
-      <Router location={history.location} navigator={history}>
-        <ApiContext.Provider value={{ setCurrentAccount: setCurrentAccountMock }}>
-          <Header />
-        </ApiContext.Provider>
-      </Router>
-    )
+    const { setCurrentAccountMock } = makeSut()
     fireEvent.click(screen.getByTestId('logout'))
     expect(setCurrentAccountMock).toHaveBeenCalledWith()
     expect(history.location.pathname).toBe('/login')
