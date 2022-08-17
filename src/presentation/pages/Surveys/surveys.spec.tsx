@@ -4,7 +4,7 @@ import { fireEvent, render, screen, waitFor } from '@testing-library/react'
 import { createMemoryHistory } from 'history'
 
 import { UnexpectedError } from '@/domain/errors'
-import { LoadSurveyListSpy } from '@/domain/test'
+import { LoadSurveyListSpy, mockAccountModel } from '@/domain/test'
 import { ApiContext } from '@/presentation/contexts'
 
 import { Surveys } from './surveys'
@@ -13,7 +13,7 @@ const history = createMemoryHistory({ initialEntries: ['/'] })
 
 const makeSut = (surveyListLength = 3, loadSurveyListSpy = new LoadSurveyListSpy(surveyListLength)) => {
   render(
-    <ApiContext.Provider value={{}}>
+    <ApiContext.Provider value={{ getCurrentAccount: mockAccountModel }}>
       <Router location={history.location} navigator={history}>
         <Surveys loadSurveyList={loadSurveyListSpy} />
       </Router>
