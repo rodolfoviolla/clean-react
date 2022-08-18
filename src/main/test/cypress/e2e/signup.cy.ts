@@ -1,6 +1,7 @@
 import { faker } from '@faker-js/faker'
 
 import * as formHelpers from '../support/formHelpers'
+import { testLocalStorageItem, testUrl } from '../support/helpers'
 import { getAnyOtherErrorStatusCodeThan } from '../support/mockHttp'
 
 const populateFieldsWithValidValues = () => {
@@ -59,21 +60,14 @@ describe('SignUp', () => {
     cy.intercept('POST', /signup/, { statusCode: 403 })
     populateFieldsWithValidValues().submitWithClick()
     formHelpers.testErrorMessage('Este e-mail está em uso')
-    formHelpers.testUrl('/signup')
+    testUrl('/signup')
   })
 
   it('Should present UnexpectedError on any other errors', () => {
     cy.intercept('POST', /signup/, { statusCode: getAnyOtherErrorStatusCodeThan([403]) })
     populateFieldsWithValidValues().submitWithClick()
     formHelpers.testErrorMessage('Ocorreu um erro inesperado. Tente novamente mais tarde')
-    formHelpers.testUrl('/signup')
-  })
-
-  it('Should present UnexpectedError if invalid data are provided', () => {
-    cy.intercept('POST', /signup/, { statusCode: 200 })
-    populateFieldsWithValidValues().submitWithClick()
-    formHelpers.testErrorMessage('Ocorreu um erro inesperado. Tente novamente mais tarde')
-    formHelpers.testUrl('/signup')
+    testUrl('/signup')
   })
 
   it('Should save accessToken if valid credentials are provided', () => {
@@ -87,8 +81,8 @@ describe('SignUp', () => {
     populateFieldsWithValidValues().submitWithEnter()
     cy.getByTestId('spinner').should('not.exist')
     cy.getByTestId('errorMessage').should('not.exist')
-    formHelpers.testLocalStorageItem('account')
-    formHelpers.testUrl('/')
+    testLocalStorageItem('account')
+    testUrl('/')
   })
 
   it('Should prevent multiple submits', () => {
