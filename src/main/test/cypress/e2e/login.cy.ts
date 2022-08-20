@@ -1,4 +1,5 @@
 import { faker } from '@faker-js/faker'
+import { RouteHandler } from 'cypress/types/net-stubbing'
 
 import {
   testUrl,
@@ -7,8 +8,6 @@ import {
   testInputElements,
   testErrorMessage
 } from '../utils'
-
-const path = /login/
 
 const populateFieldsWithValidValues = () => {
   cy.getByTestId('email').type(faker.internet.email())
@@ -19,6 +18,8 @@ const populateFieldsWithValidValues = () => {
     submitWithEnter: () => cy.getByTestId('password').type('{enter}')
   }
 }
+
+const mockHttpResponse = (response: RouteHandler) => cy.intercept('POST', /login/, response)
 
 describe('Login', () => {
   beforeEach(() => {
@@ -51,21 +52,21 @@ describe('Login', () => {
   })
 
   it('Should present InvalidCredentialsError on 401', () => {
-    cy.intercept('POST', path, { statusCode: 401 })
+    mockHttpResponse({ statusCode: 401 })
     populateFieldsWithValidValues().submitWithClick()
     testErrorMessage('Credenciais inválidas')
     testUrl('/login')
   })
 
   it('Should present UnexpectedError on any other errors', () => {
-    cy.intercept('POST', path, { statusCode: getAnyOtherErrorStatusCodeThan([401]) })
+    mockHttpResponse({ statusCode: getAnyOtherErrorStatusCodeThan([401]) })
     populateFieldsWithValidValues().submitWithClick()
     testErrorMessage('Ocorreu um erro inesperado. Tente novamente mais tarde')
     testUrl('/login')
   })
 
   it('Should save accessToken if valid credentials are provided', () => {
-    cy.intercept('POST', path, { statusCode: 200, fixture: 'account' })
+    mockHttpResponse({ statusCode: 200, fixture: 'account' })
     populateFieldsWithValidValues().submitWithClick()
     cy.getByTestId('spinner').should('not.exist')
     cy.getByTestId('errorMessage').should('not.exist')
@@ -74,14 +75,14 @@ describe('Login', () => {
   })
 
   it('Should prevent multiple submits', () => {
-    cy.intercept('POST', path, { statusCode: 200, fixture: 'account' }).as('request')
+    mockHttpResponse({ statusCode: 200, fixture: 'account' }).as('request')
     populateFieldsWithValidValues()
     cy.getByTestId('submit').dblclick()
     cy.get('@request.all').should('have.length', 1)
   })
 
   it('Should not call submit if form is invalid', () => {
-    cy.intercept('POST', path, { statusCode: 200, fixture: 'account' }).as('request')
+    mockHttpResponse({ statusCode: 200, fixture: 'account' }).as('request')
     cy.getByTestId('email').type(faker.internet.email()).type('{enter}')
     cy.get('@request.all').should('have.length', 0)
   })
