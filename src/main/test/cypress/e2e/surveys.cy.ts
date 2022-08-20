@@ -1,6 +1,6 @@
 import { faker } from '@faker-js/faker'
 
-import { setLocalStorageItem, testUrl } from '../support/helpers'
+import { getLocalStorageItem, setLocalStorageItem, testUrl } from '../support/helpers'
 import { getAnyOtherErrorStatusCodeThan } from '../support/mockHttp'
 
 describe('Surveys', () => {
@@ -18,5 +18,12 @@ describe('Surveys', () => {
     cy.intercept('GET', /surveys/, { statusCode: 403 })
     cy.visit('/')
     testUrl('/login')
+  })
+
+  it('Should present correct username', () => {
+    cy.intercept('GET', /surveys/, { statusCode: getAnyOtherErrorStatusCodeThan([403]) })
+    cy.visit('/')
+    const { name } = getLocalStorageItem('account')
+    cy.getByTestId('username').should('contain.text', name)
   })
 })
