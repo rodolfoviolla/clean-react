@@ -1,8 +1,14 @@
 import { faker } from '@faker-js/faker'
 
-import * as formHelpers from '../support/formHelpers'
-import { testUrl, testLocalStorageItem } from '../support/helpers'
-import { getAnyOtherErrorStatusCodeThan } from '../support/mockHttp'
+import {
+  testUrl,
+  testLocalStorageItem,
+  getAnyOtherErrorStatusCodeThan,
+  testInputElements,
+  testErrorMessage
+} from '../utils'
+
+const path = /login/
 
 const populateFieldsWithValidValues = () => {
   cy.getByTestId('email').type(faker.internet.email())
@@ -20,8 +26,8 @@ describe('Login', () => {
   })
 
   it('Should load with correct initial state', () => {
-    formHelpers.testInputElements('email', 'Campo obrigatório')
-    formHelpers.testInputElements('password', 'Campo obrigatório')
+    testInputElements('email', 'Campo obrigatório')
+    testInputElements('password', 'Campo obrigatório')
 
     cy.getByTestId('submit').should('have.attr', 'disabled')
     cy.getByTestId('error-wrap').should('not.have.descendants')
@@ -29,10 +35,10 @@ describe('Login', () => {
 
   it('Should present error state if form is invalid', () => {
     cy.getByTestId('email').type(faker.random.word())
-    formHelpers.testInputElements('email', 'Campo inválido')
+    testInputElements('email', 'Campo inválido')
 
     cy.getByTestId('password').type(faker.random.alphaNumeric(3))
-    formHelpers.testInputElements('password', 'Campo inválido')
+    testInputElements('password', 'Campo inválido')
 
     cy.getByTestId('submit').should('have.attr', 'disabled')
     cy.getByTestId('error-wrap').should('not.have.descendants')
@@ -45,27 +51,21 @@ describe('Login', () => {
   })
 
   it('Should present InvalidCredentialsError on 401', () => {
-    cy.intercept('POST', /login/, { statusCode: 401 })
+    cy.intercept('POST', path, { statusCode: 401 })
     populateFieldsWithValidValues().submitWithClick()
-    formHelpers.testErrorMessage('Credenciais inválidas')
+    testErrorMessage('Credenciais inválidas')
     testUrl('/login')
   })
 
   it('Should present UnexpectedError on any other errors', () => {
-    cy.intercept('POST', /login/, { statusCode: getAnyOtherErrorStatusCodeThan([401]) })
+    cy.intercept('POST', path, { statusCode: getAnyOtherErrorStatusCodeThan([401]) })
     populateFieldsWithValidValues().submitWithClick()
-    formHelpers.testErrorMessage('Ocorreu um erro inesperado. Tente novamente mais tarde')
+    testErrorMessage('Ocorreu um erro inesperado. Tente novamente mais tarde')
     testUrl('/login')
   })
 
   it('Should save accessToken if valid credentials are provided', () => {
-    cy.intercept('POST', /login/, {
-      statusCode: 200,
-      body: {
-        accessToken: faker.datatype.uuid(),
-        name: faker.name.findName()
-      }
-    })
+    cy.intercept('POST', path, { statusCode: 200, fixture: 'account' })
     populateFieldsWithValidValues().submitWithClick()
     cy.getByTestId('spinner').should('not.exist')
     cy.getByTestId('errorMessage').should('not.exist')
@@ -74,14 +74,14 @@ describe('Login', () => {
   })
 
   it('Should prevent multiple submits', () => {
-    cy.intercept('POST', /login/, { statusCode: 200, body: { accessToken: faker.datatype.uuid() } }).as('request')
+    cy.intercept('POST', path, { statusCode: 200, fixture: 'account' }).as('request')
     populateFieldsWithValidValues()
     cy.getByTestId('submit').dblclick()
     cy.get('@request.all').should('have.length', 1)
   })
 
   it('Should not call submit if form is invalid', () => {
-    cy.intercept('POST', /login/, { statusCode: 200, body: { accessToken: faker.datatype.uuid() } }).as('request')
+    cy.intercept('POST', path, { statusCode: 200, fixture: 'account' }).as('request')
     cy.getByTestId('email').type(faker.internet.email()).type('{enter}')
     cy.get('@request.all').should('have.length', 0)
   })
