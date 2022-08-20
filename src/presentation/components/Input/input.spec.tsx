@@ -10,7 +10,7 @@ const makeSut = () => {
   const fieldName = faker.database.column()
 
   render(
-    <FormContext.Provider value={[]}>
+    <FormContext.Provider value={[null, null]}>
       <Input name={fieldName} />
     </FormContext.Provider>
   )

@@ -1,9 +1,10 @@
-import React, { useContext, useEffect, useState } from 'react'
+import React, { useContext, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 
 import { Authentication } from '@/domain/useCases'
 import { Footer, FormStatus, Input, LoginHeader, SubmitButton } from '@/presentation/components'
 import { ApiContext, FormContext } from '@/presentation/contexts'
+import { useValidateField } from '@/presentation/hooks'
 import { Validation } from '@/presentation/protocols'
 
 import Styles from './login.styles.scss'
@@ -13,45 +14,27 @@ type LoginProps = {
   authentication: Authentication
 }
 
+const initialState = {
+  isLoading: false,
+  isFormInvalid: true,
+  errorMessage: '',
+  formErrors: {
+    email: '',
+    password: ''
+  },
+  formData: {
+    email: '',
+    password: ''
+  }
+}
+
 export const Login = ({ validation, authentication }: LoginProps) => {
   const { setCurrentAccount } = useContext(ApiContext)
   const navigate = useNavigate()
-  const [state, setState] = useState({
-    isLoading: false,
-    isFormInvalid: true,
-    errorMessage: '',
-    email: {
-      value: '',
-      errorMessage: ''
-    },
-    password: {
-      value: '',
-      errorMessage: ''
-    }
-  })
+  const [state, setState] = useState(initialState)
 
-  useEffect(() => {
-    const formData = {
-      email: state.email.value,
-      password: state.password.value
-    }
-
-    const emailErrorMessage = validation.validate('email', formData)
-    const passwordErrorMessage = validation.validate('password', formData)
-
-    setState({
-      ...state,
-      email: {
-        ...state.email,
-        errorMessage: emailErrorMessage
-      },
-      password: {
-        ...state.password,
-        errorMessage: passwordErrorMessage
-      },
-      isFormInvalid: !!emailErrorMessage || !!passwordErrorMessage
-    })
-  }, [state.email.value, state.password.value])
+  useValidateField({ field: 'email', formData: state.formData, setState, validation })
+  useValidateField({ field: 'password', formData: state.formData, setState, validation })
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault()
@@ -61,7 +44,7 @@ export const Login = ({ validation, authentication }: LoginProps) => {
 
       setState({ ...state, isLoading: true })
 
-      const account = await authentication.auth({ email: state.email.value, password: state.password.value })
+      const account = await authentication.auth(state.formData)
 
       setCurrentAccount(account)
 

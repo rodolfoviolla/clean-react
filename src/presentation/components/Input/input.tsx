@@ -9,7 +9,7 @@ type InputProps = React.DetailedHTMLProps<React.InputHTMLAttributes<HTMLInputEle
 export const Input = ({ placeholder, ...props }: InputProps) => {
   const inputRef = useRef<HTMLInputElement>()
   const [state, setState] = useContext(FormContext)
-  const errorMessage = state?.[props.name]?.errorMessage
+  const errorMessage = state?.formErrors?.[props.name]
 
   return (
     <div
@@ -23,7 +23,10 @@ export const Input = ({ placeholder, ...props }: InputProps) => {
         ref={inputRef}
         title={errorMessage}
         placeholder=" "
-        onChange={(event) => setState({ ...state, [event.target.name]: { value: event.target.value } })}
+        onChange={(event) => setState({
+          ...state,
+          formData: { ...state.formData, [event.target.name]: event.target.value }
+        })}
       />
 
       <label

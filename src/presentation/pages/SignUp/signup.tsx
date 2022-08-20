@@ -1,9 +1,10 @@
-import React, { useContext, useEffect, useState } from 'react'
+import React, { useContext, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 
 import { AddAccount } from '@/domain/useCases'
 import { Footer, FormStatus, Input, LoginHeader, SubmitButton } from '@/presentation/components'
 import { ApiContext, FormContext } from '@/presentation/contexts'
+import { useValidateField } from '@/presentation/hooks'
 import { Validation } from '@/presentation/protocols'
 
 import Styles from './signup.styles.scss'
@@ -13,69 +14,33 @@ type Props = {
   addAccount: AddAccount
 }
 
+const initialState = {
+  isLoading: false,
+  isFormInvalid: true,
+  errorMessage: '',
+  formData: {
+    name: '',
+    email: '',
+    password: '',
+    passwordConfirmation: ''
+  },
+  formErrors: {
+    name: '',
+    email: '',
+    password: '',
+    passwordConfirmation: ''
+  }
+}
+
 export const SignUp = ({ validation, addAccount }: Props) => {
   const { setCurrentAccount } = useContext(ApiContext)
   const navigate = useNavigate()
-  const [state, setState] = useState({
-    isLoading: false,
-    isFormInvalid: true,
-    errorMessage: '',
-    name: {
-      value: '',
-      errorMessage: ''
-    },
-    email: {
-      value: '',
-      errorMessage: ''
-    },
-    password: {
-      value: '',
-      errorMessage: ''
-    },
-    passwordConfirmation: {
-      value: '',
-      errorMessage: ''
-    }
-  })
+  const [state, setState] = useState(initialState)
 
-  useEffect(() => {
-    const formData = {
-      name: state.name.value,
-      email: state.email.value,
-      password: state.password.value,
-      passwordConfirmation: state.passwordConfirmation.value
-    }
-
-    const nameErrorMessage = validation.validate('name', formData)
-    const emailErrorMessage = validation.validate('email', formData)
-    const passwordErrorMessage = validation.validate('password', formData)
-    const passwordConfirmationErrorMessage = validation.validate('passwordConfirmation', formData)
-
-    setState({
-      ...state,
-      name: {
-        ...state.name,
-        errorMessage: nameErrorMessage
-      },
-      email: {
-        ...state.email,
-        errorMessage: emailErrorMessage
-      },
-      password: {
-        ...state.password,
-        errorMessage: passwordErrorMessage
-      },
-      passwordConfirmation: {
-        ...state.passwordConfirmation,
-        errorMessage: passwordConfirmationErrorMessage
-      },
-      isFormInvalid:
-        !!nameErrorMessage ||
-        !!emailErrorMessage ||
-        !!passwordErrorMessage ||
-        !!passwordConfirmationErrorMessage
-    })
-  }, [state.name.value, state.email.value, state.password.value, state.passwordConfirmation.value])
+  useValidateField({ field: 'name', formData: state.formData, setState, validation })
+  useValidateField({ field: 'email', formData: state.formData, setState, validation })
+  useValidateField({ field: 'password', formData: state.formData, setState, validation })
+  useValidateField({ field: 'passwordConfirmation', formData: state.formData, setState, validation })
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault()
@@ -85,12 +50,7 @@ export const SignUp = ({ validation, addAccount }: Props) => {
 
       setState({ ...state, isLoading: true })
 
-      const account = await addAccount.add({
-        name: state.name.value,
-        email: state.email.value,
-        password: state.password.value,
-        passwordConfirmation: state.passwordConfirmation.value
-      })
+      const account = await addAccount.add(state.formData)
 
       setCurrentAccount(account)
 
