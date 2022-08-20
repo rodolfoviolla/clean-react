@@ -26,4 +26,11 @@ describe('Surveys', () => {
     const { name } = getLocalStorageItem('account')
     cy.getByTestId('username').should('contain.text', name)
   })
+
+  it('Should logout on logout link click', () => {
+    cy.intercept('GET', /surveys/, { statusCode: getAnyOtherErrorStatusCodeThan([403]) })
+    cy.visit('/')
+    cy.getByTestId('logout').click()
+    testUrl('/login')
+  })
 })
