@@ -2,7 +2,7 @@ import { faker } from '@faker-js/faker'
 import { fireEvent, waitFor, screen } from '@testing-library/react'
 
 const getMockedValues = () => ({
-  name: faker.name.findName(),
+  name: faker.name.fullName(),
   email: faker.internet.email(),
   password: faker.internet.password(),
   passwordConfirmation: faker.internet.password()

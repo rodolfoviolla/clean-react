@@ -10,7 +10,7 @@ import {
 } from '../utils'
 
 const populateFieldsWithValidValues = () => {
-  cy.getByTestId('name').type(faker.name.findName())
+  cy.getByTestId('name').type(faker.name.fullName())
   testInputElements('name')
   cy.getByTestId('email').type(faker.internet.email())
   testInputElements('email')
