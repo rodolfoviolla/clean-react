@@ -4,7 +4,7 @@ node_js:
 script:
   - yarn validate
   - yarn test:coveralls
-  - gem install dpl && gem install faraday -v 1.8.0
+  - gem install faraday-net_http -v 2.1.0
 deploy:
   provider: heroku
   api_key: $HEROKU_API
