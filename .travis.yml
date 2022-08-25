@@ -8,7 +8,7 @@ script:
   - yarn validate
   - yarn test:coveralls
 before_deploy:
-  - yarn install netlify-cli -g
+  - yarn global add netlify-cli
   - yarn build
 deploy:
   provider: script
