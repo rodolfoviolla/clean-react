@@ -48,7 +48,8 @@ module.exports = merge(common, {
       filename: 'mainBundle[fullhash].css'
     }),
     new HtmlWebpackPlugin({
-      template: './template.prod.html'
+      template: './template.prod.html',
+      favicon: './public/favicon.png'
     })
   ]
 })
