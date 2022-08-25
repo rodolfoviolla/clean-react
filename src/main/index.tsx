@@ -1,11 +1,10 @@
 import React from 'react'
-import ReactDOM from 'react-dom'
+import * as ReactDOMClient from 'react-dom/client'
 
 import '@/presentation/styles/global.scss'
 
 import { Router } from './routes/router'
 
-ReactDOM.render(
-  <Router />,
-  document.getElementById('main')
-)
+ReactDOMClient
+  .createRoot(document.getElementById('main'))
+  .render(<Router />)

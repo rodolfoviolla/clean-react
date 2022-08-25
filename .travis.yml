@@ -9,6 +9,7 @@ script:
   - yarn test:coveralls
 before_deploy:
   - yarn global add netlify-cli
+  - yarn env-file
   - yarn build
 deploy:
   provider: script
