@@ -8,11 +8,11 @@ script:
   - yarn validate
   - yarn test:coveralls
 before_deploy:
-  - npm install netlify-cli -g
+  - yarn install netlify-cli -g
   - yarn build
 deploy:
-  provider: netlify
-  script: netlify deploy --dir=dist --prod
+  provider: script
   edge: true
+  script: netlify deploy --dir=dist --prod
   on:
     branch: master
