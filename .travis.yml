@@ -5,7 +5,7 @@ script:
   - yarn validate
   - yarn test:coveralls
   - gem install faraday-net_http -v 2.1.0
-deploy:
+build:
   provider: netlify
   site: clean-react-fordevs
   auth: $NETLIFY_KEY
