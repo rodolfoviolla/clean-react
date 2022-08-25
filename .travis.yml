@@ -4,7 +4,7 @@ node_js:
 script:
   - yarn validate
   - yarn test:coveralls
-  - gem install faraday-net_http -v 2.1.0
+  - echo "API_URL=$API_URL" >> ../.env
 build:
   provider: netlify
   site: clean-react-fordevs
