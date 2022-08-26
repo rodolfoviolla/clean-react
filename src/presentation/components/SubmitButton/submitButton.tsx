@@ -10,7 +10,7 @@ export const SubmitButton = ({ text }: SubmitButtonProps) => {
   const [state] = useContext(FormContext)
 
   return (
-    <button data-testid="submit" type="submit" disabled={state.isFormInvalid} >
+    <button data-testid="submit" type="submit" disabled={state.isLoading || state.isFormInvalid}>
       {text}
     </button>
   )
