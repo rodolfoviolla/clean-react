@@ -86,14 +86,6 @@ describe('SignUp', () => {
     testUrl('/')
   })
 
-  it('Should prevent multiple submits', () => {
-    mockHttpResponse({ statusCode: 200, fixture: 'account' }).as('request')
-    populateFieldsWithValidValues()
-    cy.getByTestId('submit').dblclick()
-    cy.wait('@request')
-    cy.get('@request.all').should('have.length', 1)
-  })
-
   it('Should not call submit if form is invalid', () => {
     mockHttpResponse({ statusCode: 200, fixture: 'account' }).as('request')
     cy.getByTestId('email').type(faker.internet.email()).type('{enter}')

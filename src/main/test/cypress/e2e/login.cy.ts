@@ -19,7 +19,7 @@ const populateFieldsWithValidValues = () => {
   }
 }
 
-const mockHttpResponse = (response: RouteHandler) => cy.intercept('POST', /login/, response)
+const mockHttpResponse = (response: RouteHandler) => cy.intercept('POST', /login/, response).as('request')
 
 describe('Login', () => {
   beforeEach(() => {
@@ -74,16 +74,8 @@ describe('Login', () => {
     testLocalStorageItem('account')
   })
 
-  it('Should prevent multiple submits', () => {
-    mockHttpResponse({ statusCode: 200, fixture: 'account' }).as('request')
-    populateFieldsWithValidValues()
-    cy.getByTestId('submit').dblclick()
-    cy.wait('@request')
-    cy.get('@request.all').should('have.length', 1)
-  })
-
   it('Should not call submit if form is invalid', () => {
-    mockHttpResponse({ statusCode: 200, fixture: 'account' }).as('request')
+    mockHttpResponse({ statusCode: 200, fixture: 'account' })
     cy.getByTestId('email').type(faker.internet.email()).type('{enter}')
     cy.get('@request.all').should('have.length', 0)
   })
