@@ -2,7 +2,7 @@ import { RouteHandler } from 'cypress/types/net-stubbing'
 
 import { getLocalStorageItem, setLocalStorageItem, testUrl, getAnyOtherErrorStatusCodeThan } from '../utils'
 
-const mockHttpResponse = (response: RouteHandler) => cy.intercept('GET', /surveys/, response)
+const mockHttpResponse = (response: RouteHandler) => cy.intercept('GET', /surveys/, response).as('request')
 
 describe('Surveys', () => {
   beforeEach(() => {
@@ -48,6 +48,7 @@ describe('Surveys', () => {
     mockHttpResponse({ statusCode: 200, fixture: 'surveys' })
     cy.visit('/')
     cy.get('li:empty').should('have.length', 4)
+    cy.wait('@request')
     cy.get('li:not(:empty)').should('have.length', 2)
     cy.get('li:nth-child(1)').then(li => {
       assert.equal(li.find('[data-testid="day"]').text(), '03')
