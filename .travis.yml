@@ -11,10 +11,10 @@ cache:
 script:
   - yarn validate
   - yarn test:coveralls
+  - yarn env-file
   - yarn test:cypress:ci
 before_deploy:
   - yarn global add netlify-cli
-  - yarn env-file
   - yarn build
 deploy:
   provider: script
