@@ -1,12 +1,17 @@
 language: node_js
 node_js:
   - lts/*
+addons:
+  packages:
+    - libgconf-2-4
 cache:
   directories:
     - node_modules
+    - ~/.cache
 script:
   - yarn validate
   - yarn test:coveralls
+  - yarn test:cypress:ci
 before_deploy:
   - yarn global add netlify-cli
   - yarn env-file
