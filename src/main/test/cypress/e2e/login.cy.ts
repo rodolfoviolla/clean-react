@@ -78,6 +78,7 @@ describe('Login', () => {
     mockHttpResponse({ statusCode: 200, fixture: 'account' }).as('request')
     populateFieldsWithValidValues()
     cy.getByTestId('submit').dblclick()
+    cy.wait('@request')
     cy.get('@request.all').should('have.length', 1)
   })
 
