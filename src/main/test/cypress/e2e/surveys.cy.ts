@@ -31,14 +31,14 @@ describe('Surveys', () => {
   })
 
   it('Should present correct username', () => {
-    mockHttpResponse({ statusCode: getAnyOtherErrorStatusCodeThan([403]) })
+    mockHttpResponse({ statusCode: 200 })
     cy.visit('/')
     const { name } = getLocalStorageItem('account')
     cy.getByTestId('username').should('contain.text', name)
   })
 
   it('Should logout on logout link click', () => {
-    mockHttpResponse({ statusCode: getAnyOtherErrorStatusCodeThan([403]) })
+    mockHttpResponse({ statusCode: 200 })
     cy.visit('/')
     cy.getByTestId('logout').click()
     testUrl('/login')
@@ -47,8 +47,6 @@ describe('Surveys', () => {
   it('Should present survey items', () => {
     mockHttpResponse({ statusCode: 200, fixture: 'surveys' })
     cy.visit('/')
-    cy.get('li:empty').should('have.length', 4)
-    cy.wait('@request')
     cy.get('li:not(:empty)').should('have.length', 2)
     cy.get('li:nth-child(1)').then(li => {
       assert.equal(li.find('[data-testid="day"]').text(), '03')
