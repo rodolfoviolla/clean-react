@@ -13,6 +13,7 @@ export class RemoteLoadSurveyResult {
     switch (httpResponse.statusCode) {
       case HttpStatusCode.forbidden: throw new AccessDeniedError()
       case HttpStatusCode.notFound: throw new UnexpectedError()
+      case HttpStatusCode.serverError: throw new UnexpectedError()
       default: break
     }
   }
